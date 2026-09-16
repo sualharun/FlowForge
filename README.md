@@ -1,5 +1,9 @@
 # FlowForge
 
+[![Verify FlowForge](https://github.com/sualharun/FlowForge/actions/workflows/ci.yml/badge.svg)](https://github.com/sualharun/FlowForge/actions/workflows/ci.yml)
+[![Java 21](https://img.shields.io/badge/Java-21-blue)](https://adoptium.net/temurin/releases/?version=21)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+
 **A durable DAG workflow engine built with Java 21, Spring Boot, PostgreSQL, Kafka, Redis, and React.**
 
 FlowForge turns a workflow definition into dependency-aware, concurrent execution across independent worker processes. It is an executable distributed-systems project: the database owns state, Kafka carries dispatch and results, workers can disappear, and retries preserve an auditable attempt history.
@@ -72,7 +76,7 @@ Services are independently runnable and scalable, with deliberately shared datab
 
 ### Request and execution flow
 
-1. The API rejects cycles, unknown/duplicate dependencies, duplicate task names, unsupported handlers, invalid timeouts/retries, and oversized payloads. Kahn's algorithm validates graphs in O(V + E).
+1. The API rejects cycles, unknown/duplicate dependencies, duplicate task names, unsupported handlers, invalid timeouts/retries, request bodies over 5 MiB, and graphs declaring more than 20,000 dependency edges. Kahn's algorithm validates graphs in O(V + E).
 2. One transaction writes the workflow, tasks, dependency edges, and submission event.
 3. The scheduler identifies due tasks whose **every parent is COMPLETED**. It reserves global, workflow, and optional task-type capacity before generating a fresh execution UUID and READY attempt.
 4. The task transition, execution event, and Kafka dispatch outbox entry commit together.
@@ -168,7 +172,7 @@ Indexes cover workflow status, workflow tasks, due/READY tasks, RUNNING workers,
 | GET | `/api/admin/payments?workflowId={id}` | Read-only mock ledger, used by verification |
 | GET | `/api/metrics/summary` | Durable execution metrics |
 
-Errors use Spring Problem Details: invalid requests are 400 and unknown workflows are 404. Lists are paginated with a maximum limit of 5000. Task and attempt lists are bounded by the 1000-task and 20-retry submission limits.
+Errors use Spring Problem Details: invalid requests are 400 and unknown workflows are 404. A request body over 5 MiB is refused with 413 before it is parsed, because bean validation would otherwise reject an oversized submission only after materialising all of it. Lists are paginated with a maximum limit of 5000. Task and attempt lists are bounded by the 1000-task, 20,000-edge, and 20-retry submission limits.
 
 Minimal parallel workflow:
 
@@ -208,8 +212,10 @@ Also captured: [task inspector](docs/screenshots/03-task-inspector.png),
 
 The dashboard is a monitoring surface, not an administrative one: it can submit and cancel
 workflows, but there is no authentication, no dead-letter replay, and no editing of running
-executions. Fonts are loaded from Google Fonts, so text falls back to system faces when the browser
-has no outbound network access.
+executions. Secondary text meets the WCAG AA 4.5:1 contrast ratio, every control is labelled,
+and the wide tables and dependency graph scroll inside their own containers so the page itself
+never scrolls sideways on a phone. Fonts are loaded from Google Fonts, so text falls back to
+system faces when the browser has no outbound network access.
 
 ## Local development and tests
 
@@ -222,7 +228,7 @@ cd frontend && npm ci && npm run build
 
 To run a JVM directly, start infrastructure with `docker compose up -d postgres redis kafka`, run `mvn -DskipTests package`, then use `java -jar api-service/target/api-service-0.1.0-SNAPSHOT.jar`. The API defaults to port 8080 when run directly; set `PORT=8088` if needed. Scheduler and worker default to 8081/8082. Run each in a separate terminal and set a distinct PORT for additional local workers. The Vite dev server proxies `/api` and `/actuator` to `http://localhost:8080` by default; run `VITE_API_PROXY=http://localhost:8088 npm run dev` from `frontend` to target the Compose API instead.
 
-`mvn verify` runs 60 tests: 28 in `shared` (including 19 Testcontainers integration cases against real PostgreSQL and Kafka), 6 in `api-service`, 6 in `scheduler-service`, and 20 in `worker-service`.
+`mvn verify` runs 63 tests: 29 in `shared` (including 19 Testcontainers integration cases against real PostgreSQL and Kafka), 8 in `api-service`, 6 in `scheduler-service`, and 20 in `worker-service`.
 
 Tests cover cycles/disconnected graphs, dependency joins, global/workflow/type limits, admission fairness past the candidate batch, competing schedulers/claims, duplicate payment effects, stale-result fencing, heartbeat loss, independent deadlines, persisted results during broker delay, cancellation, retry exhaustion, database constraints/rollback, Kafka outbox replay, API validation, and worker handler/acknowledgement behavior. Docker is required for integration tests; they are not silently replaced by mocks.
 
@@ -257,9 +263,10 @@ Recorded in [benchmark-results.md](benchmark-results.md), with raw JSON in `load
 
 **Verified by execution on this machine (Apple M3 Pro, Docker 11 CPUs / 7.65 GiB, 2 worker replicas):**
 
-- `mvn verify` on Temurin 21 — 60 tests, 0 failures, 0 errors, 0 skipped, including 19 Testcontainers cases on real PostgreSQL and Kafka.
+- `mvn verify` on Temurin 21 — 63 tests, 0 failures, 0 errors, 0 skipped, including 19 Testcontainers cases on real PostgreSQL and Kafka.
 - `docker compose up --build -d` — all 8 containers healthy; both Flyway migrations applied; 10 tables present; all four Kafka topics created with 12 partitions.
 - Frontend built (`tsc -b && vite build`, no errors) and served through its own nginx image; all dashboard views driven in headless Chromium with zero console errors, zero page errors, and no page-level horizontal overflow from 360 px to 1440 px.
+- Accessibility: axe-core 4.10.2 reports **0 violations** across all five views against WCAG 2.0/2.1 A and AA plus best-practice rules (29-40 rules passing per view). One decorative chevron remains flagged "needs review" because axe cannot measure contrast for glyph-only content.
 - Benchmarks, all `verified: true`: `normal` 1000 workflows / 5000 tasks, `high-concurrency` 100 × 20, `large-dag` 2 × 20 × 20 (15 200 dependency edges checked), `retry-storm` 100 × 10 (2000 backoff intervals checked). Zero duplicate payment side effects in every run.
 - Chaos, `verified: true`: cycle rejection, real parallel overlap, timeout exhaustion into the dead-letter path, cancellation blocking a downstream payment, 10 duplicate Kafka records with a replayed execution ID producing no extra attempt or ledger row, and a SIGKILLed worker recovered by heartbeat expiry with the workflow completing.
 - Resilience, `verified: true`: API and scheduler restarted mid-execution with history intact and the workflow completing; a workflow submitted while Redis was stopped completing on PostgreSQL fencing alone.
@@ -282,3 +289,7 @@ Recorded in [benchmark-results.md](benchmark-results.md), with raw JSON in `load
 - Completed attempts/events/outbox entries have no automatic retention policy. Add archival/partitioning before sustained production ingestion.
 
 Next improvements: tenant-scoped admission, versioned schemas, jitter/budgets, cursor pagination, external OIDC authorization, managed-service integration tests, asynchronous outbox batching/CDC, per-handler downstream idempotency contracts, and richer workflow data flow.
+
+## License
+
+[MIT](LICENSE).

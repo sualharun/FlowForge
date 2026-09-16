@@ -15,9 +15,30 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(WorkflowController.class)
+@org.springframework.context.annotation.Import(RequestLimits.class)
 class WorkflowControllerTest {
     @Autowired MockMvc mvc;
     @MockitoBean EngineStore store;
+
+    @Test void oversizedBodyIsRefusedBeforeItIsParsed() throws Exception {
+        // Bean Validation would only reject this after Jackson built the whole object graph, so the
+        // 1000-task limit does not bound memory on its own.
+        String padding="x".repeat(RequestLimits.MAX_REQUEST_BYTES);
+        String body="{\"name\":\"big\",\"concurrencyLimit\":2,\"tasks\":[{\"name\":\"start\","
+                + "\"taskType\":\"DELAY\",\"payload\":{\"pad\":\"" + padding + "\"}}]}";
+        mvc.perform(post("/api/workflows").contentType("application/json").content(body))
+                .andExpect(status().isPayloadTooLarge());
+        verifyNoInteractions(store);
+    }
+
+    @Test void abodyWithinTheLimitStillSubmits() throws Exception {
+        UUID id=UUID.randomUUID();when(store.submit(any())).thenReturn(Map.of("id",id,"status","PENDING"));
+        String padding="x".repeat(64 * 1024);
+        mvc.perform(post("/api/workflows").contentType("application/json").content(
+                "{\"name\":\"ok\",\"concurrencyLimit\":2,\"tasks\":[{\"name\":\"start\","
+                + "\"taskType\":\"DELAY\",\"payload\":{\"pad\":\"" + padding + "\"}}]}"))
+                .andExpect(status().isCreated());
+    }
     @Test void submissionReturnsCreatedAndLocation() throws Exception {
         UUID id=UUID.randomUUID();when(store.submit(any())).thenReturn(Map.of("id",id,"status","PENDING"));
         mvc.perform(post("/api/workflows").contentType("application/json").content("""

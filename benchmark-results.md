@@ -184,12 +184,12 @@ Losing Redis costs the redundant-scan suppression and the status cache, not corr
 JAVA_HOME=/path/to/temurin-21 mvn verify
 ```
 
-60 tests, 0 failures, 0 errors, 0 skipped, `BUILD SUCCESS`.
+63 tests, 0 failures, 0 errors, 0 skipped, `BUILD SUCCESS`.
 
 | Module | Tests | Notes |
 |---|---:|---|
-| `shared` | 28 | Includes 19 `EngineIntegrationTest` cases on real Testcontainers PostgreSQL and Kafka |
-| `api-service` | 6 | Controller validation and error mapping |
+| `shared` | 29 | Includes 19 `EngineIntegrationTest` cases on real Testcontainers PostgreSQL and Kafka, plus DAG and retry unit tests |
+| `api-service` | 8 | Controller validation, error mapping, and request-body size limits |
 | `scheduler-service` | 6 | Lease gating, recovery-before-admission ordering, lease release on failure, result-notification fencing |
 | `worker-service` | 20 | Handlers, claim/acknowledgement behaviour, listener wiring |
 

@@ -30,6 +30,36 @@ class DagValidatorTest {
         for(int i=0;i<1000;i++) tasks.add(i==0 ? task("t0") : task("t"+i,"t"+(i-1)));
         assertThatCode(()->DagValidator.validate(new WorkflowDefinition("large",10,tasks))).doesNotThrowAnyException();
     }
+    /** Fully connected layers: `layers` groups of `width`, each depending on all of its predecessor. */
+    private java.util.List<WorkflowDefinition.TaskDefinition> layered(int layers,int width) {
+        var tasks=new java.util.ArrayList<WorkflowDefinition.TaskDefinition>();
+        String[] previous={};
+        for(int layer=0;layer<layers;layer++) {
+            var current=new String[width];
+            for(int n=0;n<width;n++) {
+                current[n]="l"+layer+"t"+n;
+                tasks.add(task(current[n],previous));
+            }
+            previous=current;
+        }
+        return tasks;
+    }
+
+    @Test void rejectsAGraphWhoseTotalEdgeCountWouldDominateOneTransaction() {
+        // Edges are (layers-1) * width^2, so a graph well inside the 1000-task limit can still
+        // declare hundreds of thousands of persisted dependency rows.
+        var ok=layered(45,21);          // 945 tasks, 44*441 = 19,404 edges
+        var tooMany=layered(47,21);     // 987 tasks, 46*441 = 20,286 edges
+        assertThat(ok).hasSize(945);
+        assertThat(tooMany).hasSize(987);
+        assertThat(44*21*21).isLessThan(DagValidator.MAX_EDGES);
+        assertThat(46*21*21).isGreaterThan(DagValidator.MAX_EDGES);
+
+        assertThatCode(()->DagValidator.validate(new WorkflowDefinition("wide",10,ok))).doesNotThrowAnyException();
+        assertThatThrownBy(()->DagValidator.validate(new WorkflowDefinition("wider",10,tooMany)))
+                .hasMessageContaining("at most "+DagValidator.MAX_EDGES+" dependency edges");
+    }
+
     @Test void rejectsNonFiniteBackoffAndUnknownHandler() {
         var bad=new WorkflowDefinition.TaskDefinition("a","DELAY",Map.of(),List.of(),1000L,2,1000L,Double.NaN);
         assertThatThrownBy(()->DagValidator.validate(new WorkflowDefinition("bad",2,List.of(bad)))).hasMessageContaining("configuration");

@@ -6,6 +6,7 @@ import static io.flowforge.shared.WorkflowDefinition.TaskDefinition;
 /** Kahn's algorithm validates the entire graph in O(vertices + edges), without recursive stack growth. */
 public final class DagValidator {
     private static final Set<String> TYPES = Set.of("DELAY", "DATA_TRANSFORM", "MOCK_PAYMENT");
+    public static final int MAX_EDGES = 20000;
     private DagValidator() {}
     public static void validate(WorkflowDefinition definition) {
         if (definition.tasks() == null || definition.tasks().isEmpty() || definition.tasks().size() > 1000)
@@ -21,9 +22,14 @@ public final class DagValidator {
         }
         Map<String,Integer> indegree = new HashMap<>();
         Map<String,List<String>> children = new HashMap<>();
+        // 1000 tasks alone permit ~499,500 edges, and every edge becomes a persisted row.
+        // Bounding the total keeps one accepted submission from dominating a transaction.
+        int edges = 0;
         for (TaskDefinition task : tasks.values()) {
             Set<String> unique = new HashSet<>(task.parents());
             if (unique.size() != task.parents().size()) throw new IllegalArgumentException("Duplicate dependencies: " + task.name());
+            if ((edges += unique.size()) > MAX_EDGES)
+                throw new IllegalArgumentException("A workflow may declare at most " + MAX_EDGES + " dependency edges");
             indegree.put(task.name(),unique.size());
             for (String parent : unique) {
                 if (!tasks.containsKey(parent)) throw new IllegalArgumentException("Unknown dependency: " + parent);

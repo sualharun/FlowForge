@@ -18,6 +18,10 @@ Compose stack publishes the API on 8088 instead, so target it with
 a `.env` file). Run `npm run build` to type-check and create `dist/`. Production
 hosting must proxy the same paths to the API service.
 
+The dev server binds loopback only, because its `/api` and `/actuator` proxies
+would otherwise expose an unauthenticated API to the local network. Pass
+`npm run dev -- --host` to opt into that deliberately.
+
 The dashboard polls every four seconds without overlapping requests, cancels
 requests on navigation, and pauses polling while the browser tab is hidden. If a
 request fails, it retains the last successful snapshot and explicitly marks the

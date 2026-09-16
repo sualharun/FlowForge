@@ -9,7 +9,8 @@ public record WorkflowDefinition(@NotBlank @Size(max=200) String name,
         @Min(1) @Max(1000) Integer concurrencyLimit,
         @NotEmpty @Size(max=1000) List<@Valid TaskDefinition> tasks) {
     public record TaskDefinition(@NotBlank @Size(max=200) String name,
-            @NotBlank String taskType, Map<String,Object> payload, List<String> dependsOn,
+            @NotBlank String taskType, Map<String,Object> payload,
+            @Size(max=1000) List<@Size(max=200) String> dependsOn,
             @Min(10) @Max(3600000) Long timeoutMs, @Min(0) @Max(20) Integer maxRetries,
             @Min(10) @Max(3600000) Long initialRetryDelayMs, @DecimalMin("1.0") @DecimalMax("10.0") Double backoffMultiplier) {
         public long effectiveTimeout() { return timeoutMs == null ? 30000 : timeoutMs; }
