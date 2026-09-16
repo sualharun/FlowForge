@@ -1,0 +1,2 @@
+# Retain raw verification evidence without counting generated JSON as project source.
+load-tests/results/*.json linguist-generated=true

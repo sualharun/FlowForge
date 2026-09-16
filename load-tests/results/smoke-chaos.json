@@ -1,0 +1,80 @@
+{
+  "checks": {
+    "smoke": {
+      "cancelledDownstreamPayments": 0,
+      "cycleRejected": true,
+      "deadLetterPresent": true,
+      "parallelTasksOverlapped": true,
+      "timeoutAttempts": [
+        {
+          "attemptNumber": 1,
+          "createdAt": "2026-09-16T09:30:24.088266Z",
+          "deadline": "2026-09-16T09:30:24.249917Z",
+          "error": "Task exceeded timeout of 100 ms",
+          "executionId": "d1d3fff2-6b24-40e3-aa9d-475230598b31",
+          "finishedAt": "2026-09-16T09:30:24.271755Z",
+          "resultPayload": {
+            "completedAt": "2026-09-16T09:30:24.255560720Z",
+            "error": "Task exceeded timeout of 100 ms",
+            "executionId": "d1d3fff2-6b24-40e3-aa9d-475230598b31",
+            "output": {},
+            "retryable": true,
+            "status": "TIMED_OUT",
+            "taskId": "d900b660-2e8a-4e54-a977-c9c270ec084c",
+            "workerId": "2645fdb6-3143-49f1-9ba6-f5b65099aeaa",
+            "workflowId": "0e014772-8f19-4b12-afc8-123ed1bf2122"
+          },
+          "resultReceivedAt": "2026-09-16T09:30:24.255843Z",
+          "startedAt": "2026-09-16T09:30:24.149917Z",
+          "status": "TIMED_OUT",
+          "taskId": "d900b660-2e8a-4e54-a977-c9c270ec084c",
+          "workerId": "2645fdb6-3143-49f1-9ba6-f5b65099aeaa"
+        },
+        {
+          "attemptNumber": 2,
+          "createdAt": "2026-09-16T09:30:24.595468Z",
+          "deadline": "2026-09-16T09:30:24.732403Z",
+          "error": "Task exceeded timeout of 100 ms",
+          "executionId": "94e0460f-ca86-43a3-97ca-5d848e5d6b86",
+          "finishedAt": "2026-09-16T09:30:24.770237Z",
+          "resultPayload": {
+            "completedAt": "2026-09-16T09:30:24.738242720Z",
+            "error": "Task exceeded timeout of 100 ms",
+            "executionId": "94e0460f-ca86-43a3-97ca-5d848e5d6b86",
+            "output": {},
+            "retryable": true,
+            "status": "TIMED_OUT",
+            "taskId": "d900b660-2e8a-4e54-a977-c9c270ec084c",
+            "workerId": "a392859c-243f-4f2c-8ae9-2ec1b97f8760",
+            "workflowId": "0e014772-8f19-4b12-afc8-123ed1bf2122"
+          },
+          "resultReceivedAt": "2026-09-16T09:30:24.738595Z",
+          "startedAt": "2026-09-16T09:30:24.632403Z",
+          "status": "TIMED_OUT",
+          "taskId": "d900b660-2e8a-4e54-a977-c9c270ec084c",
+          "workerId": "a392859c-243f-4f2c-8ae9-2ec1b97f8760"
+        }
+      ],
+      "verified": true,
+      "workflowIds": [
+        "31b68e08-96b9-47a5-9e88-357de3b8f1d2",
+        "0e014772-8f19-4b12-afc8-123ed1bf2122",
+        "47a27012-3819-4897-9a18-91f6f43c4573"
+      ]
+    }
+  },
+  "configuration": {
+    "allow_worker_kill": false,
+    "base_url": "http://localhost:8088",
+    "copies": 10,
+    "output": "load-tests/results/smoke-chaos.json",
+    "project_name": "flowforge",
+    "scenario": "smoke",
+    "timeout": 180
+  },
+  "errors": [],
+  "finishedAt": "2026-09-16T09:30:26.251395+00:00",
+  "schemaVersion": 1,
+  "startedAt": "2026-09-16T09:30:20.006306+00:00",
+  "verified": true
+}

@@ -1,0 +1,11 @@
+spring:
+  application:
+    name: flowforge-api
+  config:
+    import: classpath:flowforge-common.yml
+  task:
+    scheduling:
+      pool:
+        size: 3
+server:
+  port: ${PORT:8080}

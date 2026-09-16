@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: flowforge-config
+data:
+  DB_URL: jdbc:postgresql://postgres:5432/flowforge
+  DB_USERNAME: flowforge
+  KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+  REDIS_HOST: redis
+  REDIS_PORT: '6379'
+  FLOWFORGE_WORKER_CONCURRENCY: '4'
+  FLOWFORGE_GLOBAL_CONCURRENCY: '32'
+  FLOWFORGE_TASK_TYPE_CONCURRENCY: ''
+  WORKER_TIMEOUT_MS: '15000'
+  KAFKA_TOPIC_PARTITIONS: '12'
+  KAFKA_TOPIC_REPLICAS: '1'
+  JAVA_TOOL_OPTIONS: -XX:MaxRAMPercentage=70 -XX:+ExitOnOutOfMemoryError

@@ -1,0 +1,11 @@
+{
+  "name": "OrderProcessing",
+  "concurrencyLimit": 2,
+  "tasks": [
+    {"name": "validateOrder", "taskType": "DATA_TRANSFORM", "payload": {"operation": "UPPERCASE", "data": "order-1042"}, "maxRetries": 0},
+    {"name": "reserveInventory", "taskType": "DELAY", "payload": {"durationMs": 500}, "dependsOn": ["validateOrder"]},
+    {"name": "processPayment", "taskType": "MOCK_PAYMENT", "payload": {"orderId": "order-1042", "amount": 49.95, "currency": "USD", "failUntilAttempt": 1}, "dependsOn": ["reserveInventory"], "maxRetries": 3, "initialRetryDelayMs": 1000, "backoffMultiplier": 2},
+    {"name": "createShipment", "taskType": "DELAY", "payload": {"durationMs": 500}, "dependsOn": ["processPayment"]},
+    {"name": "sendConfirmation", "taskType": "DATA_TRANSFORM", "payload": {"operation": "IDENTITY", "data": {"orderId": "order-1042", "message": "Order confirmed"}}, "dependsOn": ["createShipment"]}
+  ]
+}

@@ -1,0 +1,19 @@
+spring:
+  application:
+    name: flowforge-worker
+  config:
+    import: classpath:flowforge-common.yml
+  kafka:
+    listener:
+      ack-mode: manual_immediate
+  task:
+    scheduling:
+      pool:
+        size: 3
+server:
+  port: ${PORT:8082}
+flowforge:
+  worker:
+    concurrency: ${FLOWFORGE_WORKER_CONCURRENCY:4}
+    heartbeat-ms: ${WORKER_HEARTBEAT_MS:2000}
+    cancellation-poll-ms: ${WORKER_CANCELLATION_POLL_MS:250}

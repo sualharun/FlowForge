@@ -1,0 +1,12 @@
+- op: add
+  path: /spec/template/spec/volumes/-
+  value:
+    name: rds-ca
+    configMap:
+      name: flowforge-rds-ca
+- op: add
+  path: /spec/template/spec/containers/0/volumeMounts/-
+  value:
+    name: rds-ca
+    mountPath: /etc/rds-ca
+    readOnly: true

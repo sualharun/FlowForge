@@ -1,0 +1,641 @@
+{
+  "checks": {
+    "duplicate": {
+      "attemptsAfter": 1,
+      "attemptsBefore": 1,
+      "consumerLagSamples": [
+        {
+          "at": "2026-09-16T19:19:15.591784+00:00",
+          "lag": 0
+        }
+      ],
+      "duplicateMessagesPublished": 10,
+      "duplicateSideEffectCount": 0,
+      "executionId": "7761736b-a94b-49e8-a9c5-ea07ae34ad5d",
+      "paymentLedgerEntries": 1,
+      "verified": true,
+      "workflowId": "a1fe56a4-50c1-45de-8894-e19c21a49610"
+    },
+    "smoke": {
+      "cancelledDownstreamPayments": 0,
+      "cycleRejected": true,
+      "deadLetterPresent": true,
+      "parallelTasksOverlapped": true,
+      "timeoutAttempts": [
+        {
+          "attemptNumber": 1,
+          "createdAt": "2026-09-16T19:19:10.614171Z",
+          "deadline": "2026-09-16T19:19:10.777979Z",
+          "error": "Task exceeded timeout of 100 ms",
+          "executionId": "1562d99e-e6cd-4cfa-8d0d-8bb00f31c04e",
+          "finishedAt": "2026-09-16T19:19:10.902441Z",
+          "resultPayload": {
+            "completedAt": "2026-09-16T19:19:10.785353930Z",
+            "error": "Task exceeded timeout of 100 ms",
+            "executionId": "1562d99e-e6cd-4cfa-8d0d-8bb00f31c04e",
+            "output": {},
+            "retryable": true,
+            "status": "TIMED_OUT",
+            "taskId": "40ddade0-115f-4644-9ae6-88f0e52ba936",
+            "workerId": "141b2b25-6aef-46e5-9a8e-decd3f3362fa",
+            "workflowId": "8dbf22f6-d608-42c7-95fc-932ee4e82ba3"
+          },
+          "resultReceivedAt": "2026-09-16T19:19:10.792936Z",
+          "startedAt": "2026-09-16T19:19:10.677979Z",
+          "status": "TIMED_OUT",
+          "taskId": "40ddade0-115f-4644-9ae6-88f0e52ba936",
+          "workerId": "141b2b25-6aef-46e5-9a8e-decd3f3362fa"
+        },
+        {
+          "attemptNumber": 2,
+          "createdAt": "2026-09-16T19:19:11.121587Z",
+          "deadline": "2026-09-16T19:19:11.304757Z",
+          "error": "Task exceeded timeout of 100 ms",
+          "executionId": "e9a560e5-53c7-40ec-81e2-d4e78104c1bf",
+          "finishedAt": "2026-09-16T19:19:11.415376Z",
+          "resultPayload": {
+            "completedAt": "2026-09-16T19:19:11.307917375Z",
+            "error": "Task exceeded timeout of 100 ms",
+            "executionId": "e9a560e5-53c7-40ec-81e2-d4e78104c1bf",
+            "output": {},
+            "retryable": true,
+            "status": "TIMED_OUT",
+            "taskId": "40ddade0-115f-4644-9ae6-88f0e52ba936",
+            "workerId": "141b2b25-6aef-46e5-9a8e-decd3f3362fa",
+            "workflowId": "8dbf22f6-d608-42c7-95fc-932ee4e82ba3"
+          },
+          "resultReceivedAt": "2026-09-16T19:19:11.308689Z",
+          "startedAt": "2026-09-16T19:19:11.204757Z",
+          "status": "TIMED_OUT",
+          "taskId": "40ddade0-115f-4644-9ae6-88f0e52ba936",
+          "workerId": "141b2b25-6aef-46e5-9a8e-decd3f3362fa"
+        }
+      ],
+      "verified": true,
+      "workflowIds": [
+        "5a7ad193-160a-4576-bff8-84847b36b726",
+        "8dbf22f6-d608-42c7-95fc-932ee4e82ba3",
+        "27fb7232-df1b-44b9-b4c7-9dede2e8fda4"
+      ]
+    },
+    "worker-failure": {
+      "abandonedTaskIds": [
+        "0a5d542c-dc2f-4de7-a98f-8b99b216a086",
+        "17a639cc-433e-4191-8196-8d358b9b8ff5",
+        "27798d85-c331-4f9e-80ec-4266f8524b8e",
+        "347bb381-462e-4f40-b581-0e6748e5538b"
+      ],
+      "attempts": [
+        {
+          "attemptNumber": 1,
+          "createdAt": "2026-09-16T19:19:16.201171Z",
+          "deadline": "2026-09-16T19:20:16.240750Z",
+          "error": "Worker heartbeat expired",
+          "executionId": "e4f7185c-6124-47e6-9828-4788e7c9847c",
+          "finishedAt": "2026-09-16T19:19:31.497573Z",
+          "resultPayload": null,
+          "resultReceivedAt": null,
+          "startedAt": "2026-09-16T19:19:16.240750Z",
+          "status": "FAILED",
+          "taskId": "27798d85-c331-4f9e-80ec-4266f8524b8e",
+          "workerId": "db8b4315-eb97-4251-9246-f558d9cb92e7"
+        },
+        {
+          "attemptNumber": 1,
+          "createdAt": "2026-09-16T19:19:16.203196Z",
+          "deadline": "2026-09-16T19:20:16.244630Z",
+          "error": "Worker heartbeat expired",
+          "executionId": "5713828c-2ebe-4d4d-931f-442876f02ba2",
+          "finishedAt": "2026-09-16T19:19:31.501128Z",
+          "resultPayload": null,
+          "resultReceivedAt": null,
+          "startedAt": "2026-09-16T19:19:16.244630Z",
+          "status": "FAILED",
+          "taskId": "347bb381-462e-4f40-b581-0e6748e5538b",
+          "workerId": "db8b4315-eb97-4251-9246-f558d9cb92e7"
+        },
+        {
+          "attemptNumber": 1,
+          "createdAt": "2026-09-16T19:19:16.204806Z",
+          "deadline": "2026-09-16T19:20:16.247134Z",
+          "error": null,
+          "executionId": "a4ec7e55-8aee-47ec-99e2-5c0e999ff84b",
+          "finishedAt": "2026-09-16T19:19:26.288322Z",
+          "resultPayload": {
+            "completedAt": "2026-09-16T19:19:26.253284632Z",
+            "error": null,
+            "executionId": "a4ec7e55-8aee-47ec-99e2-5c0e999ff84b",
+            "output": {
+              "sleptMs": 10000
+            },
+            "retryable": false,
+            "status": "COMPLETED",
+            "taskId": "f453dc0c-0588-4815-99b5-e6464abb1b14",
+            "workerId": "141b2b25-6aef-46e5-9a8e-decd3f3362fa",
+            "workflowId": "55ea1a45-0599-479e-90d9-140b0d5de8f8"
+          },
+          "resultReceivedAt": "2026-09-16T19:19:26.256075Z",
+          "startedAt": "2026-09-16T19:19:16.247134Z",
+          "status": "COMPLETED",
+          "taskId": "f453dc0c-0588-4815-99b5-e6464abb1b14",
+          "workerId": "141b2b25-6aef-46e5-9a8e-decd3f3362fa"
+        },
+        {
+          "attemptNumber": 1,
+          "createdAt": "2026-09-16T19:19:16.206347Z",
+          "deadline": "2026-09-16T19:20:26.276217Z",
+          "error": null,
+          "executionId": "a7d51d49-2857-4d00-81aa-04298d792ccb",
+          "finishedAt": "2026-09-16T19:19:36.322782Z",
+          "resultPayload": {
+            "completedAt": "2026-09-16T19:19:36.280728387Z",
+            "error": null,
+            "executionId": "a7d51d49-2857-4d00-81aa-04298d792ccb",
+            "output": {
+              "sleptMs": 10000
+            },
+            "retryable": false,
+            "status": "COMPLETED",
+            "taskId": "72731b6a-ccd3-48c3-8c7e-51d386005aa6",
+            "workerId": "141b2b25-6aef-46e5-9a8e-decd3f3362fa",
+            "workflowId": "55ea1a45-0599-479e-90d9-140b0d5de8f8"
+          },
+          "resultReceivedAt": "2026-09-16T19:19:36.283447Z",
+          "startedAt": "2026-09-16T19:19:26.276217Z",
+          "status": "COMPLETED",
+          "taskId": "72731b6a-ccd3-48c3-8c7e-51d386005aa6",
+          "workerId": "141b2b25-6aef-46e5-9a8e-decd3f3362fa"
+        },
+        {
+          "attemptNumber": 1,
+          "createdAt": "2026-09-16T19:19:16.207638Z",
+          "deadline": "2026-09-16T19:20:36.289338Z",
+          "error": null,
+          "executionId": "d8a8b3f7-cf30-494f-92a7-3d961b6e9217",
+          "finishedAt": "2026-09-16T19:19:46.376306Z",
+          "resultPayload": {
+            "completedAt": "2026-09-16T19:19:46.300474919Z",
+            "error": null,
+            "executionId": "d8a8b3f7-cf30-494f-92a7-3d961b6e9217",
+            "output": {
+              "sleptMs": 10000
+            },
+            "retryable": false,
+            "status": "COMPLETED",
+            "taskId": "f764b9d2-908f-4721-8632-179ea3a4900b",
+            "workerId": "141b2b25-6aef-46e5-9a8e-decd3f3362fa",
+            "workflowId": "55ea1a45-0599-479e-90d9-140b0d5de8f8"
+          },
+          "resultReceivedAt": "2026-09-16T19:19:46.303652Z",
+          "startedAt": "2026-09-16T19:19:36.289338Z",
+          "status": "COMPLETED",
+          "taskId": "f764b9d2-908f-4721-8632-179ea3a4900b",
+          "workerId": "141b2b25-6aef-46e5-9a8e-decd3f3362fa"
+        },
+        {
+          "attemptNumber": 1,
+          "createdAt": "2026-09-16T19:19:16.208907Z",
+          "deadline": "2026-09-16T19:24:32.801731Z",
+          "error": null,
+          "executionId": "8b1c7ab2-9d43-4c8c-928b-94a1983d82b0",
+          "finishedAt": "2026-09-16T19:23:42.865232Z",
+          "resultPayload": {
+            "completedAt": "2026-09-16T19:23:42.810325051Z",
+            "error": null,
+            "executionId": "8b1c7ab2-9d43-4c8c-928b-94a1983d82b0",
+            "output": {
+              "sleptMs": 10000
+            },
+            "retryable": false,
+            "status": "COMPLETED",
+            "taskId": "3cab1a58-0904-432b-b390-581ac36b8d48",
+            "workerId": "141b2b25-6aef-46e5-9a8e-decd3f3362fa",
+            "workflowId": "55ea1a45-0599-479e-90d9-140b0d5de8f8"
+          },
+          "resultReceivedAt": "2026-09-16T19:23:42.812425Z",
+          "startedAt": "2026-09-16T19:23:32.801731Z",
+          "status": "COMPLETED",
+          "taskId": "3cab1a58-0904-432b-b390-581ac36b8d48",
+          "workerId": "141b2b25-6aef-46e5-9a8e-decd3f3362fa"
+        },
+        {
+          "attemptNumber": 1,
+          "createdAt": "2026-09-16T19:19:16.209954Z",
+          "deadline": "2026-09-16T19:20:16.250817Z",
+          "error": "Worker heartbeat expired",
+          "executionId": "78bd2fcb-d698-4ed1-98dc-d075509a99cf",
+          "finishedAt": "2026-09-16T19:19:31.502608Z",
+          "resultPayload": null,
+          "resultReceivedAt": null,
+          "startedAt": "2026-09-16T19:19:16.250817Z",
+          "status": "FAILED",
+          "taskId": "0a5d542c-dc2f-4de7-a98f-8b99b216a086",
+          "workerId": "db8b4315-eb97-4251-9246-f558d9cb92e7"
+        },
+        {
+          "attemptNumber": 1,
+          "createdAt": "2026-09-16T19:19:16.210956Z",
+          "deadline": "2026-09-16T19:21:06.403139Z",
+          "error": "Execution deadline exceeded",
+          "executionId": "09648c33-9fa7-4292-a2ef-60d9488ba312",
+          "finishedAt": "2026-09-16T19:23:22.719306Z",
+          "resultPayload": null,
+          "resultReceivedAt": null,
+          "startedAt": "2026-09-16T19:20:06.403139Z",
+          "status": "TIMED_OUT",
+          "taskId": "f666ca70-e7e0-411c-9185-371b88d3fe1e",
+          "workerId": "141b2b25-6aef-46e5-9a8e-decd3f3362fa"
+        },
+        {
+          "attemptNumber": 1,
+          "createdAt": "2026-09-16T19:19:16.211867Z",
+          "deadline": "2026-09-16T19:20:16.254259Z",
+          "error": null,
+          "executionId": "259ae427-7c56-4a50-9050-59f7748e2d38",
+          "finishedAt": "2026-09-16T19:19:26.291072Z",
+          "resultPayload": {
+            "completedAt": "2026-09-16T19:19:26.258067132Z",
+            "error": null,
+            "executionId": "259ae427-7c56-4a50-9050-59f7748e2d38",
+            "output": {
+              "sleptMs": 10000
+            },
+            "retryable": false,
+            "status": "COMPLETED",
+            "taskId": "b0d559c5-7207-4c41-894f-e85374061cc3",
+            "workerId": "141b2b25-6aef-46e5-9a8e-decd3f3362fa",
+            "workflowId": "55ea1a45-0599-479e-90d9-140b0d5de8f8"
+          },
+          "resultReceivedAt": "2026-09-16T19:19:26.271573Z",
+          "startedAt": "2026-09-16T19:19:16.254259Z",
+          "status": "COMPLETED",
+          "taskId": "b0d559c5-7207-4c41-894f-e85374061cc3",
+          "workerId": "141b2b25-6aef-46e5-9a8e-decd3f3362fa"
+        },
+        {
+          "attemptNumber": 1,
+          "createdAt": "2026-09-16T19:19:16.212819Z",
+          "deadline": "2026-09-16T19:20:26.280563Z",
+          "error": null,
+          "executionId": "c4a3505d-f0f4-4420-9d51-35b695d16108",
+          "finishedAt": "2026-09-16T19:19:36.320285Z",
+          "resultPayload": {
+            "completedAt": "2026-09-16T19:19:36.286079595Z",
+            "error": null,
+            "executionId": "c4a3505d-f0f4-4420-9d51-35b695d16108",
+            "output": {
+              "sleptMs": 10000
+            },
+            "retryable": false,
+            "status": "COMPLETED",
+            "taskId": "a0aff302-6d3c-47a6-88bf-a856cdbdbb2b",
+            "workerId": "141b2b25-6aef-46e5-9a8e-decd3f3362fa",
+            "workflowId": "55ea1a45-0599-479e-90d9-140b0d5de8f8"
+          },
+          "resultReceivedAt": "2026-09-16T19:19:36.287905Z",
+          "startedAt": "2026-09-16T19:19:26.280563Z",
+          "status": "COMPLETED",
+          "taskId": "a0aff302-6d3c-47a6-88bf-a856cdbdbb2b",
+          "workerId": "141b2b25-6aef-46e5-9a8e-decd3f3362fa"
+        },
+        {
+          "attemptNumber": 1,
+          "createdAt": "2026-09-16T19:19:16.213886Z",
+          "deadline": "2026-09-16T19:20:16.256625Z",
+          "error": null,
+          "executionId": "423b355b-6b0a-42a2-ab33-679e59682086",
+          "finishedAt": "2026-09-16T19:19:26.293388Z",
+          "resultPayload": {
+            "completedAt": "2026-09-16T19:19:26.260195007Z",
+            "error": null,
+            "executionId": "423b355b-6b0a-42a2-ab33-679e59682086",
+            "output": {
+              "sleptMs": 10000
+            },
+            "retryable": false,
+            "status": "COMPLETED",
+            "taskId": "33dbfa3b-31a5-4184-91f0-9b69c08d165c",
+            "workerId": "141b2b25-6aef-46e5-9a8e-decd3f3362fa",
+            "workflowId": "55ea1a45-0599-479e-90d9-140b0d5de8f8"
+          },
+          "resultReceivedAt": "2026-09-16T19:19:26.274144Z",
+          "startedAt": "2026-09-16T19:19:16.256625Z",
+          "status": "COMPLETED",
+          "taskId": "33dbfa3b-31a5-4184-91f0-9b69c08d165c",
+          "workerId": "141b2b25-6aef-46e5-9a8e-decd3f3362fa"
+        },
+        {
+          "attemptNumber": 1,
+          "createdAt": "2026-09-16T19:19:16.214777Z",
+          "deadline": "2026-09-16T19:20:16.259210Z",
+          "error": "Worker heartbeat expired",
+          "executionId": "07b3fd85-06d6-49fa-b67e-17478062bfcc",
+          "finishedAt": "2026-09-16T19:19:31.505053Z",
+          "resultPayload": null,
+          "resultReceivedAt": null,
+          "startedAt": "2026-09-16T19:19:16.259210Z",
+          "status": "FAILED",
+          "taskId": "17a639cc-433e-4191-8196-8d358b9b8ff5",
+          "workerId": "db8b4315-eb97-4251-9246-f558d9cb92e7"
+        },
+        {
+          "attemptNumber": 1,
+          "createdAt": "2026-09-16T19:19:16.215626Z",
+          "deadline": "2026-09-16T19:24:22.779011Z",
+          "error": null,
+          "executionId": "7272a2c0-48bb-44cc-a2c8-2a3bf7a31737",
+          "finishedAt": "2026-09-16T19:23:32.849505Z",
+          "resultPayload": {
+            "completedAt": "2026-09-16T19:23:32.784207629Z",
+            "error": null,
+            "executionId": "7272a2c0-48bb-44cc-a2c8-2a3bf7a31737",
+            "output": {
+              "sleptMs": 10000
+            },
+            "retryable": false,
+            "status": "COMPLETED",
+            "taskId": "be715e84-f7a7-4bb3-9596-6ffa377d7aaf",
+            "workerId": "141b2b25-6aef-46e5-9a8e-decd3f3362fa",
+            "workflowId": "55ea1a45-0599-479e-90d9-140b0d5de8f8"
+          },
+          "resultReceivedAt": "2026-09-16T19:23:32.788281Z",
+          "startedAt": "2026-09-16T19:23:22.779011Z",
+          "status": "COMPLETED",
+          "taskId": "be715e84-f7a7-4bb3-9596-6ffa377d7aaf",
+          "workerId": "141b2b25-6aef-46e5-9a8e-decd3f3362fa"
+        },
+        {
+          "attemptNumber": 1,
+          "createdAt": "2026-09-16T19:19:16.216536Z",
+          "deadline": "2026-09-16T19:20:46.318737Z",
+          "error": null,
+          "executionId": "a197a958-d66a-4de4-b520-23d3b159b293",
+          "finishedAt": "2026-09-16T19:19:56.440300Z",
+          "resultPayload": {
+            "completedAt": "2026-09-16T19:19:56.331075299Z",
+            "error": null,
+            "executionId": "a197a958-d66a-4de4-b520-23d3b159b293",
+            "output": {
+              "sleptMs": 10000
+            },
+            "retryable": false,
+            "status": "COMPLETED",
+            "taskId": "6254994e-2510-4054-a832-a8743a14f9c1",
+            "workerId": "141b2b25-6aef-46e5-9a8e-decd3f3362fa",
+            "workflowId": "55ea1a45-0599-479e-90d9-140b0d5de8f8"
+          },
+          "resultReceivedAt": "2026-09-16T19:19:56.336497Z",
+          "startedAt": "2026-09-16T19:19:46.318737Z",
+          "status": "COMPLETED",
+          "taskId": "6254994e-2510-4054-a832-a8743a14f9c1",
+          "workerId": "141b2b25-6aef-46e5-9a8e-decd3f3362fa"
+        },
+        {
+          "attemptNumber": 1,
+          "createdAt": "2026-09-16T19:19:16.217382Z",
+          "deadline": "2026-09-16T19:20:16.261771Z",
+          "error": null,
+          "executionId": "490c19ee-0d82-4d0f-a3e6-b40694f97906",
+          "finishedAt": "2026-09-16T19:19:26.296963Z",
+          "resultPayload": {
+            "completedAt": "2026-09-16T19:19:26.265500548Z",
+            "error": null,
+            "executionId": "490c19ee-0d82-4d0f-a3e6-b40694f97906",
+            "output": {
+              "sleptMs": 10000
+            },
+            "retryable": false,
+            "status": "COMPLETED",
+            "taskId": "b8d5f380-554d-4cc0-9d81-4a3748374a50",
+            "workerId": "141b2b25-6aef-46e5-9a8e-decd3f3362fa",
+            "workflowId": "55ea1a45-0599-479e-90d9-140b0d5de8f8"
+          },
+          "resultReceivedAt": "2026-09-16T19:19:26.278540Z",
+          "startedAt": "2026-09-16T19:19:16.261771Z",
+          "status": "COMPLETED",
+          "taskId": "b8d5f380-554d-4cc0-9d81-4a3748374a50",
+          "workerId": "141b2b25-6aef-46e5-9a8e-decd3f3362fa"
+        },
+        {
+          "attemptNumber": 1,
+          "createdAt": "2026-09-16T19:19:16.218248Z",
+          "deadline": "2026-09-16T19:24:32.797084Z",
+          "error": null,
+          "executionId": "c6c4f579-0a39-4083-985f-2f4e30dd005f",
+          "finishedAt": "2026-09-16T19:23:42.867948Z",
+          "resultPayload": {
+            "completedAt": "2026-09-16T19:23:42.810324968Z",
+            "error": null,
+            "executionId": "c6c4f579-0a39-4083-985f-2f4e30dd005f",
+            "output": {
+              "sleptMs": 10000
+            },
+            "retryable": false,
+            "status": "COMPLETED",
+            "taskId": "b1b6d8f9-a30c-4b81-804a-8355602ef2ce",
+            "workerId": "141b2b25-6aef-46e5-9a8e-decd3f3362fa",
+            "workflowId": "55ea1a45-0599-479e-90d9-140b0d5de8f8"
+          },
+          "resultReceivedAt": "2026-09-16T19:23:42.815304Z",
+          "startedAt": "2026-09-16T19:23:32.797084Z",
+          "status": "COMPLETED",
+          "taskId": "b1b6d8f9-a30c-4b81-804a-8355602ef2ce",
+          "workerId": "141b2b25-6aef-46e5-9a8e-decd3f3362fa"
+        },
+        {
+          "attemptNumber": 2,
+          "createdAt": "2026-09-16T19:19:32.014684Z",
+          "deadline": "2026-09-16T19:21:06.405876Z",
+          "error": "Execution deadline exceeded",
+          "executionId": "310aacc8-3eae-44e9-a341-4726c89adcac",
+          "finishedAt": "2026-09-16T19:23:22.721388Z",
+          "resultPayload": null,
+          "resultReceivedAt": null,
+          "startedAt": "2026-09-16T19:20:06.405876Z",
+          "status": "TIMED_OUT",
+          "taskId": "27798d85-c331-4f9e-80ec-4266f8524b8e",
+          "workerId": "141b2b25-6aef-46e5-9a8e-decd3f3362fa"
+        },
+        {
+          "attemptNumber": 2,
+          "createdAt": "2026-09-16T19:19:32.016364Z",
+          "deadline": "2026-09-16T19:21:06.400450Z",
+          "error": "Execution deadline exceeded",
+          "executionId": "f8fee250-a5ae-4143-bcad-b10cfb0ea47d",
+          "finishedAt": "2026-09-16T19:23:22.717074Z",
+          "resultPayload": null,
+          "resultReceivedAt": null,
+          "startedAt": "2026-09-16T19:20:06.400450Z",
+          "status": "TIMED_OUT",
+          "taskId": "347bb381-462e-4f40-b581-0e6748e5538b",
+          "workerId": "141b2b25-6aef-46e5-9a8e-decd3f3362fa"
+        },
+        {
+          "attemptNumber": 2,
+          "createdAt": "2026-09-16T19:19:32.017433Z",
+          "deadline": "2026-09-16T19:20:56.348542Z",
+          "error": null,
+          "executionId": "1888c8db-c839-4b8b-a100-e80b761b0198",
+          "finishedAt": "2026-09-16T19:20:06.419042Z",
+          "resultPayload": {
+            "completedAt": "2026-09-16T19:20:06.361177928Z",
+            "error": null,
+            "executionId": "1888c8db-c839-4b8b-a100-e80b761b0198",
+            "output": {
+              "sleptMs": 10000
+            },
+            "retryable": false,
+            "status": "COMPLETED",
+            "taskId": "0a5d542c-dc2f-4de7-a98f-8b99b216a086",
+            "workerId": "141b2b25-6aef-46e5-9a8e-decd3f3362fa",
+            "workflowId": "55ea1a45-0599-479e-90d9-140b0d5de8f8"
+          },
+          "resultReceivedAt": "2026-09-16T19:20:06.366045Z",
+          "startedAt": "2026-09-16T19:19:56.348542Z",
+          "status": "COMPLETED",
+          "taskId": "0a5d542c-dc2f-4de7-a98f-8b99b216a086",
+          "workerId": "141b2b25-6aef-46e5-9a8e-decd3f3362fa"
+        },
+        {
+          "attemptNumber": 2,
+          "createdAt": "2026-09-16T19:19:32.018611Z",
+          "deadline": "2026-09-16T19:24:22.781948Z",
+          "error": null,
+          "executionId": "7f6a9e7f-e07d-4b10-8b45-c5c189078815",
+          "finishedAt": "2026-09-16T19:23:32.852162Z",
+          "resultPayload": {
+            "completedAt": "2026-09-16T19:23:32.786039796Z",
+            "error": null,
+            "executionId": "7f6a9e7f-e07d-4b10-8b45-c5c189078815",
+            "output": {
+              "sleptMs": 10000
+            },
+            "retryable": false,
+            "status": "COMPLETED",
+            "taskId": "17a639cc-433e-4191-8196-8d358b9b8ff5",
+            "workerId": "141b2b25-6aef-46e5-9a8e-decd3f3362fa",
+            "workflowId": "55ea1a45-0599-479e-90d9-140b0d5de8f8"
+          },
+          "resultReceivedAt": "2026-09-16T19:23:32.792745Z",
+          "startedAt": "2026-09-16T19:23:22.781948Z",
+          "status": "COMPLETED",
+          "taskId": "17a639cc-433e-4191-8196-8d358b9b8ff5",
+          "workerId": "141b2b25-6aef-46e5-9a8e-decd3f3362fa"
+        },
+        {
+          "attemptNumber": 2,
+          "createdAt": "2026-09-16T19:23:23.229920Z",
+          "deadline": "2026-09-16T19:27:09.637059Z",
+          "error": null,
+          "executionId": "23abc559-94e0-436a-89d4-949d6f44c6c4",
+          "finishedAt": "2026-09-16T19:26:19.729647Z",
+          "resultPayload": {
+            "completedAt": "2026-09-16T19:26:19.655621838Z",
+            "error": null,
+            "executionId": "23abc559-94e0-436a-89d4-949d6f44c6c4",
+            "output": {
+              "sleptMs": 10000
+            },
+            "retryable": false,
+            "status": "COMPLETED",
+            "taskId": "f666ca70-e7e0-411c-9185-371b88d3fe1e",
+            "workerId": "141b2b25-6aef-46e5-9a8e-decd3f3362fa",
+            "workflowId": "55ea1a45-0599-479e-90d9-140b0d5de8f8"
+          },
+          "resultReceivedAt": "2026-09-16T19:26:19.658385Z",
+          "startedAt": "2026-09-16T19:26:09.637059Z",
+          "status": "COMPLETED",
+          "taskId": "f666ca70-e7e0-411c-9185-371b88d3fe1e",
+          "workerId": "141b2b25-6aef-46e5-9a8e-decd3f3362fa"
+        },
+        {
+          "attemptNumber": 3,
+          "createdAt": "2026-09-16T19:23:23.231832Z",
+          "deadline": "2026-09-16T19:24:42.818602Z",
+          "error": "Execution deadline exceeded",
+          "executionId": "bab729d9-4bd4-419e-b208-a323a5a578be",
+          "finishedAt": "2026-09-16T19:26:09.529281Z",
+          "resultPayload": null,
+          "resultReceivedAt": null,
+          "startedAt": "2026-09-16T19:23:42.818602Z",
+          "status": "TIMED_OUT",
+          "taskId": "347bb381-462e-4f40-b581-0e6748e5538b",
+          "workerId": "141b2b25-6aef-46e5-9a8e-decd3f3362fa"
+        },
+        {
+          "attemptNumber": 3,
+          "createdAt": "2026-09-16T19:23:23.232926Z",
+          "deadline": "2026-09-16T19:24:23.284260Z",
+          "error": null,
+          "executionId": "92c3ec96-2a50-460f-82db-5ba888fb4c5a",
+          "finishedAt": "2026-09-16T19:23:33.376160Z",
+          "resultPayload": {
+            "completedAt": "2026-09-16T19:23:33.288119755Z",
+            "error": null,
+            "executionId": "92c3ec96-2a50-460f-82db-5ba888fb4c5a",
+            "output": {
+              "sleptMs": 10000
+            },
+            "retryable": false,
+            "status": "COMPLETED",
+            "taskId": "27798d85-c331-4f9e-80ec-4266f8524b8e",
+            "workerId": "141b2b25-6aef-46e5-9a8e-decd3f3362fa",
+            "workflowId": "55ea1a45-0599-479e-90d9-140b0d5de8f8"
+          },
+          "resultReceivedAt": "2026-09-16T19:23:33.289675Z",
+          "startedAt": "2026-09-16T19:23:23.284260Z",
+          "status": "COMPLETED",
+          "taskId": "27798d85-c331-4f9e-80ec-4266f8524b8e",
+          "workerId": "141b2b25-6aef-46e5-9a8e-decd3f3362fa"
+        },
+        {
+          "attemptNumber": 4,
+          "createdAt": "2026-09-16T19:26:10.049707Z",
+          "deadline": "2026-09-16T19:27:10.120111Z",
+          "error": null,
+          "executionId": "f7819ea5-1223-4c44-9572-5dcc5911909d",
+          "finishedAt": "2026-09-16T19:26:20.146686Z",
+          "resultPayload": {
+            "completedAt": "2026-09-16T19:26:20.128853880Z",
+            "error": null,
+            "executionId": "f7819ea5-1223-4c44-9572-5dcc5911909d",
+            "output": {
+              "sleptMs": 10000
+            },
+            "retryable": false,
+            "status": "COMPLETED",
+            "taskId": "347bb381-462e-4f40-b581-0e6748e5538b",
+            "workerId": "141b2b25-6aef-46e5-9a8e-decd3f3362fa",
+            "workflowId": "55ea1a45-0599-479e-90d9-140b0d5de8f8"
+          },
+          "resultReceivedAt": "2026-09-16T19:26:20.132466Z",
+          "startedAt": "2026-09-16T19:26:10.120111Z",
+          "status": "COMPLETED",
+          "taskId": "347bb381-462e-4f40-b581-0e6748e5538b",
+          "workerId": "141b2b25-6aef-46e5-9a8e-decd3f3362fa"
+        }
+      ],
+      "clientObservedRecoveryTimeMs": 40006.42575000529,
+      "heartbeatExpiredAttempts": 4,
+      "killedContainer": "0b8939a39870540d105b52561cf2318e7093db7e4f1463f66dc558a154175d88",
+      "killedWorkerId": "db8b4315-eb97-4251-9246-f558d9cb92e7",
+      "verified": true,
+      "workerRecoveryTimeMs": 39920.976877212524,
+      "workflowId": "55ea1a45-0599-479e-90d9-140b0d5de8f8"
+    }
+  },
+  "configuration": {
+    "allow_worker_kill": true,
+    "base_url": "http://localhost:8088",
+    "copies": 10,
+    "output": "load-tests/results/chaos.json",
+    "project_name": "flowforge",
+    "scenario": "all",
+    "timeout": 180
+  },
+  "errors": [],
+  "finishedAt": "2026-09-16T19:27:00.683026+00:00",
+  "schemaVersion": 1,
+  "startedAt": "2026-09-16T19:19:08.005037+00:00",
+  "verified": true
+}

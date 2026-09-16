@@ -1,0 +1,66 @@
+spring:
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5433/flowforge}
+    username: ${DB_USERNAME:flowforge}
+    password: ${DB_PASSWORD:flowforge-local-only}
+    hikari:
+      maximum-pool-size: 16
+  flyway:
+    enabled: true
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6380}
+      timeout: 500ms
+      connect-timeout: 500ms
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:29092}
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+      acks: all
+      properties:
+        enable.idempotence: true
+        delivery.timeout.ms: 15000
+        request.timeout.ms: 5000
+        max.block.ms: 5000
+    consumer:
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      enable-auto-commit: false
+      auto-offset-reset: earliest
+      max-poll-records: 1
+      properties:
+        max.poll.interval.ms: 3700000
+    listener:
+      ack-mode: record
+    admin:
+      fail-fast: true
+  lifecycle:
+    timeout-per-shutdown-phase: 20s
+server:
+  shutdown: graceful
+  error:
+    include-message: never
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus
+  endpoint:
+    health:
+      probes:
+        enabled: true
+      group:
+        readiness:
+          include: readinessState,db
+logging:
+  structured:
+    format:
+      console: logstash
+flowforge:
+  global-concurrency: ${FLOWFORGE_GLOBAL_CONCURRENCY:32}
+  task-type-concurrency: ${FLOWFORGE_TASK_TYPE_CONCURRENCY:}
+  worker-timeout-ms: ${WORKER_TIMEOUT_MS:15000}
+  topic-partitions: ${KAFKA_TOPIC_PARTITIONS:12}
+  topic-replicas: ${KAFKA_TOPIC_REPLICAS:1}

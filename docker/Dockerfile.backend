@@ -1,0 +1,22 @@
+# syntax=docker/dockerfile:1
+FROM maven:3.9.9-eclipse-temurin-21 AS build
+WORKDIR /workspace
+COPY pom.xml ./
+COPY shared ./shared
+COPY api-service ./api-service
+COPY scheduler-service ./scheduler-service
+COPY worker-service ./worker-service
+RUN --mount=type=cache,target=/root/.m2 mvn -B -ntp -DskipTests package
+
+FROM eclipse-temurin:21-jre-jammy
+RUN apt-get update && apt-get install -y --no-install-recommends curl \
+    && rm -rf /var/lib/apt/lists/* \
+    && groupadd --gid 10001 flowforge \
+    && useradd --uid 10001 --gid flowforge --no-create-home flowforge
+WORKDIR /app
+ARG SERVICE
+COPY --from=build --chown=flowforge:flowforge /workspace/${SERVICE}/target/${SERVICE}-0.1.0-SNAPSHOT.jar /app/app.jar
+USER 10001:10001
+ENV JAVA_TOOL_OPTIONS="-XX:MaxRAMPercentage=70 -XX:+ExitOnOutOfMemoryError"
+EXPOSE 8080 8081 8082
+ENTRYPOINT ["java", "-jar", "/app/app.jar"]

@@ -1,0 +1,27 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: flowforge
+resources:
+  - ../../base
+patches:
+  - path: config.yaml
+  - target:
+      kind: Deployment
+      labelSelector: app.kubernetes.io/component=backend
+    path: mount-rds-ca.yaml
+images:
+  - name: flowforge/api
+    newName: 000000000000.dkr.ecr.us-east-1.amazonaws.com/flowforge/api
+    newTag: REPLACE_WITH_IMMUTABLE_TAG
+  - name: flowforge/scheduler
+    newName: 000000000000.dkr.ecr.us-east-1.amazonaws.com/flowforge/scheduler
+    newTag: REPLACE_WITH_IMMUTABLE_TAG
+  - name: flowforge/worker
+    newName: 000000000000.dkr.ecr.us-east-1.amazonaws.com/flowforge/worker
+    newTag: REPLACE_WITH_IMMUTABLE_TAG
+  - name: flowforge/frontend
+    newName: 000000000000.dkr.ecr.us-east-1.amazonaws.com/flowforge/frontend
+    newTag: REPLACE_WITH_IMMUTABLE_TAG
+replicas:
+  - name: frontend
+    count: 2

@@ -1,0 +1,92 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: redis
+  labels:
+    app.kubernetes.io/name: redis
+    app.kubernetes.io/part-of: flowforge
+    app.kubernetes.io/component: datastore
+spec:
+  serviceName: redis
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: redis
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: redis
+        app.kubernetes.io/part-of: flowforge
+        app.kubernetes.io/component: datastore
+    spec:
+      containers:
+      - name: redis
+        image: redis:7-alpine
+        ports:
+        - name: client
+          containerPort: 6379
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            cpu: '1'
+            memory: 256Mi
+        args:
+        - --appendonly
+        - 'yes'
+        volumeMounts:
+        - name: data
+          mountPath: /data
+        startupProbe:
+          exec:
+            command:
+            - redis-cli
+            - ping
+          periodSeconds: 10
+          timeoutSeconds: 10
+          failureThreshold: 30
+        readinessProbe:
+          exec:
+            command:
+            - redis-cli
+            - ping
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        livenessProbe:
+          exec:
+            command:
+            - redis-cli
+            - ping
+          periodSeconds: 20
+          timeoutSeconds: 10
+          failureThreshold: 6
+      terminationGracePeriodSeconds: 60
+  volumeClaimTemplates:
+  - metadata:
+      name: data
+    spec:
+      accessModes:
+      - ReadWriteOnce
+      resources:
+        requests:
+          storage: 1Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: redis
+  labels:
+    app.kubernetes.io/name: redis
+    app.kubernetes.io/part-of: flowforge
+    app.kubernetes.io/component: datastore
+spec:
+  clusterIP: None
+  publishNotReadyAddresses: false
+  selector:
+    app.kubernetes.io/name: redis
+  ports:
+  - name: client
+    port: 6379
+    targetPort: client

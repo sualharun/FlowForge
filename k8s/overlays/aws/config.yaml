@@ -1,0 +1,15 @@
+# Edit the three private managed-service endpoints before rendering/applying.
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: flowforge-config
+data:
+  DB_URL: jdbc:postgresql://REPLACE_RDS_ENDPOINT:5432/flowforge?sslmode=verify-full&sslrootcert=/etc/rds-ca/global-bundle.pem
+  DB_USERNAME: flowforge
+  REDIS_HOST: REPLACE_ELASTICACHE_PRIMARY_ENDPOINT
+  REDIS_PORT: "6379"
+  SPRING_DATA_REDIS_SSL_ENABLED: "true"
+  KAFKA_BOOTSTRAP_SERVERS: REPLACE_MSK_SASL_SCRAM_BOOTSTRAP_SERVERS
+  SPRING_KAFKA_PROPERTIES_SECURITY_PROTOCOL: SASL_SSL
+  SPRING_KAFKA_PROPERTIES_SASL_MECHANISM: SCRAM-SHA-512
+  KAFKA_TOPIC_REPLICAS: "3"

@@ -1,0 +1,12 @@
+{
+  "name": "ParallelOrderFulfillment",
+  "concurrencyLimit": 4,
+  "tasks": [
+    {"name": "validateOrder", "taskType": "DATA_TRANSFORM", "payload": {"operation": "UPPERCASE", "data": "order-2042"}},
+    {"name": "reserveInventory", "taskType": "DELAY", "payload": {"durationMs": 3000}, "dependsOn": ["validateOrder"]},
+    {"name": "fraudReview", "taskType": "DELAY", "payload": {"durationMs": 3000}, "dependsOn": ["validateOrder"]},
+    {"name": "calculateShipping", "taskType": "DELAY", "payload": {"durationMs": 2000}, "dependsOn": ["validateOrder"]},
+    {"name": "processPayment", "taskType": "MOCK_PAYMENT", "payload": {"orderId": "order-2042", "amount": 129.50, "currency": "USD"}, "dependsOn": ["reserveInventory", "fraudReview"]},
+    {"name": "createShipment", "taskType": "DATA_TRANSFORM", "payload": {"operation": "IDENTITY", "data": {"trackingNumber": "FF-2042"}}, "dependsOn": ["processPayment", "calculateShipping"]}
+  ]
+}

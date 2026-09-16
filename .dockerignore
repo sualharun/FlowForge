@@ -1,0 +1,10 @@
+.git
+.idea
+.vscode
+**/target
+**/node_modules
+**/dist
+**/__pycache__
+.env
+load-tests/results
+*.log

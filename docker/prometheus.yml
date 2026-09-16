@@ -1,0 +1,18 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+scrape_configs:
+  - job_name: flowforge-api
+    metrics_path: /actuator/prometheus
+    static_configs:
+      - targets: [api:8080]
+  - job_name: flowforge-scheduler
+    metrics_path: /actuator/prometheus
+    static_configs:
+      - targets: [scheduler:8081]
+  - job_name: flowforge-workers
+    metrics_path: /actuator/prometheus
+    dns_sd_configs:
+      - names: [worker]
+        type: A
+        port: 8082
