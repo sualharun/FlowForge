@@ -255,7 +255,7 @@ The resilience command restarts the API and scheduler while a dependency chain i
 
 ## Kubernetes and AWS
 
-See [deployment guide](docs/deployment.md). Kubernetes includes API, scheduler, worker, frontend, PostgreSQL, Redis, Kafka, health probes, resource budgets, secret references, and worker autoscaling. The local stateful stack is for development. The AWS overlay is structured for EKS with RDS PostgreSQL, ElastiCache, MSK, and ECR images; it requires actual endpoints, secrets, TLS/network policies, and account infrastructure. Kubernetes/AWS deployment is not claimed unless explicitly recorded in the verification report.
+See [deployment guide](docs/deployment.md). Kubernetes includes API, scheduler, worker, frontend, PostgreSQL, Redis, Kafka, health probes, resource budgets, secret references, and worker autoscaling. The local stateful stack is for development. The AWS overlay is structured for EKS with RDS PostgreSQL, ElastiCache, MSK, and ECR images; it requires actual endpoints, secrets, TLS/network policies, and account infrastructure. The local overlay has been applied to a real cluster and executed workflows; see [kubernetes-local.json](docs/verification/kubernetes-local.json). The AWS overlay has not been applied.
 
 ## Verification status
 
@@ -270,15 +270,17 @@ Recorded in [benchmark-results.md](benchmark-results.md), with raw JSON in `load
 - Benchmarks, all `correctnessVerified` **and** `timingVerified`: `normal` 1000 workflows / 5000 tasks, `high-concurrency` 100 × 20, `large-dag` 2 × 20 × 20 (15 200 dependency edges checked), `retry-storm` 100 × 10 (2000 backoff intervals checked). Zero duplicate payment side effects in every run. The harness cross-checks its wall and monotonic clocks against the persisted database span and publishes no throughput unless they agree.
 - Chaos, `verified: true`: cycle rejection, real parallel overlap, timeout exhaustion into the dead-letter path, cancellation blocking a downstream payment, 10 duplicate Kafka records with a replayed execution ID producing no extra attempt or ledger row, and a SIGKILLed worker recovered by heartbeat expiry with the workflow completing.
 - Resilience and outages, all `verified: true`: API and scheduler restarted mid-execution with history intact; a workflow submitted while Redis was stopped completing on PostgreSQL fencing alone; a Kafka outage holding a durably persisted result whose attempt still read `RUNNING`, then draining on recovery; a PostgreSQL outage correctly failing readiness and recovering; and a **paused** worker recovered through deadline expiry rather than heartbeat loss.
+- **Kubernetes:** `kubectl apply -k k8s/overlays/local` accepted all 21 objects unmodified on a single-node cluster; 10/10 pods reached ready, all 3 StatefulSet PVCs bound from the default StorageClass, both Flyway migrations applied, both examples completed (including the intentional payment retry), the frontend Service proxied `/api` and `/actuator` to the in-cluster `api` Service, and two clock-validated benchmarks ran on the cluster (150 workflows / 3000 tasks and 900 workflows / 4500 tasks) with zero duplicate side effects.
 - Restart from a fully stopped stack: `docker compose down` then `up --build -d` reached eight healthy containers in 24.6 s with every durable row count identical and the Kafka topics intact.
 - Browser acceptance audit: 12 passed, 0 failed, 0 findings, 0 page errors in Chromium 152, including real submission and cancellation, dialog keyboard handling, injected 503/empty/loading states, and four viewport widths.
 
 **Not verified:**
 
-- **Kubernetes and AWS were never deployed.** Both overlays render with `kubectl kustomize` and all seven workloads carry startup/readiness/liveness probes with resource requests and limits, but no cluster was available here, so nothing was applied or scheduled. AWS endpoints, credentials, certificates, and image locations are placeholders.
+- **AWS was never deployed.** The `k8s/overlays/aws` overlay renders with `kubectl kustomize` but was not applied; its endpoints, credentials, CA paths, and ECR images are placeholders.
+- **No worker autoscaling event was observed.** The HPA is accepted, targets the worker Deployment, and reads real CPU, but worker CPU peaked at 76% of request for a single sample and sat at 8-34% under sustained load, because workers spend their time waiting on the scheduler tick, database locks, and Kafka rather than computing. Durable READY queue depth would be a better scaling signal than CPU.
+- Single-node cluster only: multi-node scheduling, rolling upgrades, and node failure were not exercised.
 - Single runs only; no variance or soak measurement, and an unrelated Docker project shared the host.
-- Benchmark client-clock durations disagree with database wall-clock spans. Correctness checks passed, but the recorded throughput is not a validated capacity measurement; see the timing limitation in [benchmark-results.md](benchmark-results.md).
-- No Kafka outage, PostgreSQL failover, network partition, paused-worker, or multi-region recovery experiment.
+- No network partition, PostgreSQL failover, disk-full, or multi-region recovery experiment.
 
 ## Scope and tradeoffs
 

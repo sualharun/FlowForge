@@ -1,0 +1,362 @@
+{
+  "apply": {
+    "command": "kubectl apply -k k8s/overlays/local",
+    "imagesSideloaded": [
+      "flowforge/api:local",
+      "flowforge/scheduler:local",
+      "flowforge/worker:local",
+      "flowforge/frontend:local"
+    ],
+    "modified": false,
+    "objectsCreated": 21,
+    "overlay": "k8s/overlays/local"
+  },
+  "benchmarksOnCluster": {
+    "high-concurrency-150x20": {
+      "configuration": {
+        "base_url": "http://localhost:18088",
+        "delay_ms": 5,
+        "layers": 20,
+        "output": "/tmp/claude-501/-Users-sualharun-Documents-ChatGPT-Astra/8147bb5c-fd91-4452-a1b2-bee4c749e347/scratchpad/k8s-load.json",
+        "poll_concurrency": 8,
+        "poll_interval": 1,
+        "scenario": "high-concurrency",
+        "skip_payment_verification": false,
+        "submit_concurrency": 16,
+        "timeout": 1800,
+        "width": 20,
+        "workflows": 150
+      },
+      "correctnessVerified": true,
+      "note": "workflowDetails omitted to keep this artifact small; rerun the command to regenerate it",
+      "summary": {
+        "attemptCount": 3000,
+        "backoffIntervalsChecked": 0,
+        "completedTasks": 3000,
+        "dependencyEdgesChecked": 0,
+        "duplicateSideEffectCount": 0,
+        "failureRate": 0.0,
+        "p50TaskDurationMs": 61.20896339416504,
+        "p50WorkflowLatencyMs": 27649.81198310852,
+        "p95TaskDurationMs": 513.1649971008301,
+        "p95WorkflowLatencyMs": 61378.644943237305,
+        "retryCount": 0,
+        "retryRate": 0.0,
+        "submissionErrorCount": 0,
+        "tasksPerSecond": 45.58447111114401,
+        "totalTasks": 3000,
+        "verifiedTasks": 3000,
+        "workerRecoveryTimeMs": null,
+        "workflowsCancelled": 0,
+        "workflowsCompleted": 150,
+        "workflowsFailed": 0,
+        "workflowsPerSecond": 2.2792235555572007,
+        "workflowsRequested": 150,
+        "workflowsSubmitted": 150,
+        "workflowsUnfinished": 0
+      },
+      "timing": {
+        "absoluteToleranceSeconds": 0.25,
+        "accumulatedClockDisagreementSeconds": 0.004236550000002091,
+        "allowedDiscrepancySeconds": 0.3158127,
+        "backwardMonotonicObservations": 0,
+        "backwardWallObservations": 0,
+        "clockObservations": 8922,
+        "consistent": true,
+        "database": {
+          "attempts": {
+            "firstTimestamp": "2026-09-17T07:19:17.444477Z",
+            "lastTimestamp": "2026-09-17T07:20:22.467300Z",
+            "spanSeconds": 65.02282285690308,
+            "timestampCount": 9000
+          },
+          "combined": {
+            "firstTimestamp": "2026-09-17T07:19:17.139895Z",
+            "lastTimestamp": "2026-09-17T07:20:22.468195Z",
+            "spanSeconds": 65.32829999923706,
+            "timestampCount": 18450
+          },
+          "tasks": {
+            "firstTimestamp": "2026-09-17T07:19:17.140351Z",
+            "lastTimestamp": "2026-09-17T07:20:22.467427Z",
+            "spanSeconds": 65.32707595825195,
+            "timestampCount": 9000
+          },
+          "workflows": {
+            "firstTimestamp": "2026-09-17T07:19:17.139895Z",
+            "lastTimestamp": "2026-09-17T07:20:22.468195Z",
+            "spanSeconds": 65.32829999923706,
+            "timestampCount": 450
+          }
+        },
+        "deadlineDerivation": "sum(max(forward wall increment, forward monotonic increment, 0)) across clock observations",
+        "deadlineElapsedSeconds": 65.81441109800028,
+        "executionDurationDerivation": "executionEnd.monotonicNs - executionStart.monotonicNs, divided by 1e9; from before submission until terminal polling ends, excluding setup and verification",
+        "executionEnd": {
+          "captureSpanSeconds": 2.91e-07,
+          "monotonicNs": 223519369615895,
+          "wallTime": "2026-09-17T07:20:22.905497+00:00",
+          "wallTimeUnixNs": 1789629622905497000
+        },
+        "executionStart": {
+          "captureSpanSeconds": 1.083e-06,
+          "monotonicNs": 223453557730249,
+          "wallTime": "2026-09-17T07:19:17.092797+00:00",
+          "wallTimeUnixNs": 1789629557092797000
+        },
+        "issues": [],
+        "maxCaptureSpanSeconds": 5.0875e-05,
+        "monotonicDurationSeconds": 65.811885646,
+        "relativeToleranceFraction": 0.001,
+        "toleranceRationale": "Declared measurement-quality budget: 250 ms absolute sampling/timestamp allowance plus 0.1% relative clock-rate disagreement; not a measured OS guarantee",
+        "wallDurationSeconds": 65.8127,
+        "wallMonotonicDisagreementSeconds": 0.0008143540000133953
+      },
+      "timingVerified": true
+    },
+    "normal-900": {
+      "configuration": {
+        "base_url": "http://localhost:18088",
+        "delay_ms": 1,
+        "layers": 20,
+        "output": "/tmp/claude-501/-Users-sualharun-Documents-ChatGPT-Astra/8147bb5c-fd91-4452-a1b2-bee4c749e347/scratchpad/k8s-load2.json",
+        "poll_concurrency": 8,
+        "poll_interval": 1,
+        "scenario": "normal",
+        "skip_payment_verification": false,
+        "submit_concurrency": 32,
+        "timeout": 1800,
+        "width": 10,
+        "workflows": 900
+      },
+      "correctnessVerified": true,
+      "note": "workflowDetails omitted to keep this artifact small; rerun the command to regenerate it",
+      "summary": {
+        "attemptCount": 4500,
+        "backoffIntervalsChecked": 0,
+        "completedTasks": 4500,
+        "dependencyEdgesChecked": 3600,
+        "duplicateSideEffectCount": 0,
+        "failureRate": 0.0,
+        "p50TaskDurationMs": 39.87002372741699,
+        "p50WorkflowLatencyMs": 56974.34592247009,
+        "p95TaskDurationMs": 511.1720561981201,
+        "p95WorkflowLatencyMs": 104745.1319694519,
+        "retryCount": 0,
+        "retryRate": 0.0,
+        "submissionErrorCount": 0,
+        "tasksPerSecond": 39.63158494767104,
+        "totalTasks": 4500,
+        "verifiedTasks": 4500,
+        "workerRecoveryTimeMs": null,
+        "workflowsCancelled": 0,
+        "workflowsCompleted": 900,
+        "workflowsFailed": 0,
+        "workflowsPerSecond": 7.926316989534207,
+        "workflowsRequested": 900,
+        "workflowsSubmitted": 900,
+        "workflowsUnfinished": 0
+      },
+      "timing": {
+        "absoluteToleranceSeconds": 0.25,
+        "accumulatedClockDisagreementSeconds": 0.027744617999998836,
+        "allowedDiscrepancySeconds": 0.363547204,
+        "backwardMonotonicObservations": 0,
+        "backwardWallObservations": 0,
+        "clockObservations": 72950,
+        "consistent": true,
+        "database": {
+          "attempts": {
+            "firstTimestamp": "2026-09-17T07:24:23.630203Z",
+            "lastTimestamp": "2026-09-17T07:26:16.072029Z",
+            "spanSeconds": 112.4418261051178,
+            "timestampCount": 13500
+          },
+          "combined": {
+            "firstTimestamp": "2026-09-17T07:24:23.388109Z",
+            "lastTimestamp": "2026-09-17T07:26:16.073839Z",
+            "spanSeconds": 112.68572998046875,
+            "timestampCount": 29700
+          },
+          "tasks": {
+            "firstTimestamp": "2026-09-17T07:24:23.389769Z",
+            "lastTimestamp": "2026-09-17T07:26:16.072214Z",
+            "spanSeconds": 112.68244481086731,
+            "timestampCount": 13500
+          },
+          "workflows": {
+            "firstTimestamp": "2026-09-17T07:24:23.388109Z",
+            "lastTimestamp": "2026-09-17T07:26:16.073839Z",
+            "spanSeconds": 112.68572998046875,
+            "timestampCount": 2700
+          }
+        },
+        "deadlineDerivation": "sum(max(forward wall increment, forward monotonic increment, 0)) across clock observations",
+        "deadlineElapsedSeconds": 113.56037408000114,
+        "executionDurationDerivation": "executionEnd.monotonicNs - executionStart.monotonicNs, divided by 1e9; from before submission until terminal polling ends, excluding setup and verification",
+        "executionEnd": {
+          "captureSpanSeconds": 2.5e-07,
+          "monotonicNs": 223873381027583,
+          "wallTime": "2026-09-17T07:26:16.921289+00:00",
+          "wallTimeUnixNs": 1789629976921289000
+        },
+        "executionStart": {
+          "captureSpanSeconds": 1.083e-06,
+          "monotonicNs": 223759835228041,
+          "wallTime": "2026-09-17T07:24:23.374085+00:00",
+          "wallTimeUnixNs": 1789629863374085000
+        },
+        "issues": [],
+        "maxCaptureSpanSeconds": 8.7708e-05,
+        "monotonicDurationSeconds": 113.545799542,
+        "relativeToleranceFraction": 0.001,
+        "toleranceRationale": "Declared measurement-quality budget: 250 ms absolute sampling/timestamp allowance plus 0.1% relative clock-rate disagreement; not a measured OS guarantee",
+        "wallDurationSeconds": 113.547204,
+        "wallMonotonicDisagreementSeconds": 0.0014044579999961115
+      },
+      "timingVerified": true
+    }
+  },
+  "claim": "The k8s/overlays/local manifests were applied to a real cluster and executed real workflows.",
+  "cluster": {
+    "defaultStorageClass": [
+      "standard"
+    ],
+    "nodes": [
+      "flowforge-control-plane"
+    ],
+    "note": "Single-node kind cluster in Docker. Not a production topology.",
+    "serverVersion": "v1.37.0",
+    "tool": "kind v0.33.0 go1.27.0 darwin/arm64"
+  },
+  "functional": {
+    "examplesCompleted": {
+      "OrderProcessing": "COMPLETED 5/5 with the intentional first-attempt payment failure retried on attempt 2",
+      "ParallelOrderFulfillment": "COMPLETED 6/6"
+    },
+    "frontendServiceProxy": {
+      "actuatorProxy": 200,
+      "apiProxy": 200,
+      "detail": "nginx proxy_pass http://api:8080 resolves the in-cluster api Service",
+      "index": 200
+    },
+    "migrationsApplied": [
+      "1 initial schema",
+      "2 wall clock timestamps"
+    ]
+  },
+  "gitCommit": "8c9b6c20802ae2fb22bca5d70d6e0b41762b9bae",
+  "horizontalPodAutoscaler": {
+    "currentReplicas": 2,
+    "desiredReplicas": 2,
+    "finding": "The HPA is accepted, targets the worker Deployment and reads real CPU. No scale event was observed. Worker CPU peaked at 76% of request for a single 15s sample during a burst and stayed at 8-34% under sustained load, because workers are dominated by waiting on the 500ms scheduler tick, database locks and Kafka rather than computing. CPU utilisation is therefore a weak scaling signal for this workload; durable READY queue depth would be a better one.",
+    "maxReplicas": 6,
+    "metricsServer": "installed separately for this test; not shipped by the repo",
+    "minReplicas": 2,
+    "readsMetrics": true,
+    "scaleEventObserved": false,
+    "target": [
+      {
+        "resource": {
+          "name": "cpu",
+          "target": {
+            "averageUtilization": 70,
+            "type": "Utilization"
+          }
+        },
+        "type": "Resource"
+      }
+    ]
+  },
+  "notVerified": [
+    "AWS: the k8s/overlays/aws overlay was not applied. Its endpoints, credentials, CA paths and ECR images are placeholders.",
+    "Multi-node scheduling, rolling upgrades, and node failure were not exercised on this single-node cluster.",
+    "Throughput here is not comparable with the Compose figures: different task delays and workflow counts were used."
+  ],
+  "persistentVolumeClaims": [
+    {
+      "capacity": "5Gi",
+      "name": "data-kafka-0",
+      "phase": "Bound"
+    },
+    {
+      "capacity": "5Gi",
+      "name": "data-postgres-0",
+      "phase": "Bound"
+    },
+    {
+      "capacity": "1Gi",
+      "name": "data-redis-0",
+      "phase": "Bound"
+    }
+  ],
+  "pods": [
+    {
+      "name": "api-54c9569f94-5t766",
+      "phase": "Running",
+      "ready": true,
+      "restarts": 2
+    },
+    {
+      "name": "api-54c9569f94-nhhf2",
+      "phase": "Running",
+      "ready": true,
+      "restarts": 2
+    },
+    {
+      "name": "frontend-6bcbc6f656-5sx8s",
+      "phase": "Running",
+      "ready": true,
+      "restarts": 0
+    },
+    {
+      "name": "kafka-0",
+      "phase": "Running",
+      "ready": true,
+      "restarts": 0
+    },
+    {
+      "name": "postgres-0",
+      "phase": "Running",
+      "ready": true,
+      "restarts": 0
+    },
+    {
+      "name": "redis-0",
+      "phase": "Running",
+      "ready": true,
+      "restarts": 0
+    },
+    {
+      "name": "scheduler-8666d88c9c-n8bwk",
+      "phase": "Running",
+      "ready": true,
+      "restarts": 2
+    },
+    {
+      "name": "scheduler-8666d88c9c-qftc2",
+      "phase": "Running",
+      "ready": true,
+      "restarts": 3
+    },
+    {
+      "name": "worker-77674f57cd-brr2z",
+      "phase": "Running",
+      "ready": true,
+      "restarts": 3
+    },
+    {
+      "name": "worker-77674f57cd-dhgbl",
+      "phase": "Running",
+      "ready": true,
+      "restarts": 3
+    }
+  ],
+  "recordedAt": "2026-09-17T07:30:31.725970+00:00",
+  "schemaVersion": 1,
+  "startupFinding": {
+    "area": "Startup ordering",
+    "detail": "Backend pods have no initContainers and no dependency ordering, so they start before postgres/kafka DNS resolves, fail fast with UnknownHostException, exit 1, and converge via restartPolicy: Always. Observed 2-3 restarts per backend pod before readiness; zero further restarts under load. Docker Compose orders this with depends_on: service_healthy; Kubernetes has no equivalent in these manifests.",
+    "severity": "P2"
+  }
+}

@@ -172,6 +172,45 @@ rows, 3 dead letters, 43 941 outbox rows — and the four Kafka topics retained 
 the named volumes. A subsequent example workflow completed 5/5, confirming the README's claim that
 `docker compose down` retains execution state in volumes.
 
+## Kubernetes
+
+`docs/verification/kubernetes-local.json` records this run.
+
+`kubectl apply -k k8s/overlays/local` was applied **unmodified** to a single-node
+[kind](https://kind.sigs.k8s.io) cluster (Kubernetes v1.37.0) after side-loading the four locally
+built images. The API server accepted all 21 objects, which is real schema validation rather than
+the client-side rendering that was all the previous report could claim.
+
+| Check | Result |
+|---|---|
+| Pods ready | 10 / 10 — 2 api, 2 scheduler, 2 worker, 1 frontend, plus postgres, redis and kafka StatefulSets |
+| StatefulSet volume claims | 3 / 3 `Bound` from the default StorageClass (5Gi postgres, 5Gi kafka, 1Gi redis) |
+| Flyway | both migrations applied to the fresh cluster volume |
+| Examples | `OrderProcessing` 5/5 including the intentional first-attempt payment failure retried on attempt 2; `ParallelOrderFulfillment` 6/6 |
+| Frontend Service | `/`, `/api/workflows` and `/actuator/prometheus` all 200 — nginx `proxy_pass http://api:8080` resolves the in-cluster `api` Service |
+| Pod disruption budgets | present and satisfied for api, scheduler and worker |
+| Benchmarks on the cluster | `high-concurrency` 150 workflows / 3000 tasks and `normal` 900 workflows / 4500 tasks, both `correctnessVerified` and `timingVerified`, zero duplicate side effects |
+
+**These cluster figures are not comparable with the Compose numbers above** — different task delays
+and workflow counts were used — so they are recorded as evidence that the deployment executes
+correctly, not as a capacity comparison.
+
+Two honest findings came out of it:
+
+- **Startup ordering relies on crash-looping.** The manifests declare no `initContainers` and no
+  dependency ordering, so backend pods start before the `postgres` and `kafka` Services resolve,
+  fail fast with `UnknownHostException`, exit 1, and converge through `restartPolicy: Always`. Each
+  backend pod restarted 2–3 times before reaching ready, then stayed stable with zero further
+  restarts under load. Compose expresses this with `depends_on: service_healthy`; these manifests
+  have no equivalent.
+- **The HPA reads metrics but never scaled.** It is accepted, targets the worker Deployment and
+  reports real CPU once a metrics-server is present (the repo does not ship one, correctly — that is
+  cluster infrastructure). Worker CPU reached 76 % of request for a single 15-second sample during a
+  burst and sat at 8–34 % under sustained load, because workers spend their time waiting on the
+  500 ms scheduler tick, database locks and Kafka rather than computing. No scale event occurred.
+  CPU utilisation is a weak scaling signal for this engine; durable READY queue depth would be a
+  better one.
+
 ## Automated test suite
 
 ```bash
@@ -213,12 +252,11 @@ remains flagged "needs review" because axe cannot measure contrast for glyph-onl
 
 ## What was not measured or verified
 
-- **No Kubernetes or AWS runtime verification.** Both overlays render with `kubectl kustomize`, and
-  all seven workloads carry startup, readiness and liveness probes plus resource requests and
-  limits. No cluster was available in this environment (`kubectl` has no configured context), so
-  nothing was applied or scheduled. Offline schema validation is also impossible —
-  `kubectl apply --dry-run=client` must download the cluster OpenAPI document. The AWS endpoints,
-  credentials, certificate paths and ECR image locations are deliberate placeholders.
+- **AWS was never deployed.** `k8s/overlays/aws` renders with `kubectl kustomize` but was not
+  applied. Its endpoints, credentials, certificate paths and ECR image locations are deliberate
+  placeholders.
+- **No worker autoscaling event was observed**, and multi-node scheduling, rolling upgrades and
+  node failure were not exercised on the single-node cluster. See the Kubernetes section above.
 - Single runs only. No scenario was repeated enough times to report variance, and the machine was
   running an unrelated Docker project throughout.
 - Docker VM CPU/memory allocation is recorded from `docker info`; the harness does not infer it.

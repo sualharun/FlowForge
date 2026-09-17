@@ -94,6 +94,22 @@ kubectl -n flowforge rollout status deployment/worker --timeout=300s
 kubectl -n flowforge port-forward service/frontend 3000:8080
 ```
 
+This overlay has been applied to a real single-node kind cluster and executed workflows; the
+recorded evidence is in [kubernetes-local.json](verification/kubernetes-local.json). Two things to
+expect when you run it:
+
+- **Backend pods restart 2-3 times before they reach ready.** There are no `initContainers` and no
+  dependency ordering, so api, scheduler and worker start before the `postgres` and `kafka` Services
+  resolve, fail fast with `UnknownHostException`, and converge through `restartPolicy: Always`. The
+  startup probe allows 300 s, which is ample. If you want ordered startup, add an `initContainer`
+  that waits on the datastore Services; Compose expresses the same thing with
+  `depends_on: service_healthy`.
+- **The worker HPA needs a metrics-server, which this repo deliberately does not ship** because it
+  is cluster infrastructure. Without one the HPA reports `cpu: <unknown>` and never scales. With one
+  installed it reads real utilisation, but note that worker CPU stays well under the 70 % target
+  even under sustained load: the workers wait on the scheduler tick, database locks and Kafka rather
+  than computing, so CPU is a weak scaling signal for this engine.
+
 For another cluster, push the images to a reachable registry and change Kustomize image names/tags. A default StorageClass must provision the three local StatefulSet volume claims. The local Secret contains the same non-production password as Compose. Backend pods use non-root users, read-only root filesystems, `/tmp` scratch volumes, dropped capabilities, resource requests/limits, and startup/readiness/liveness probes.
 
 The worker HPA keeps 2–6 replicas and uses CPU utilization at 70% of the CPU request. It requires metrics-server; without resource metrics it cannot make scaling decisions. CPU is a weak signal for DELAY or I/O-bound work, so use manual scale tests or add queue-lag autoscaling for those workloads. See the [Kubernetes HPA documentation](https://kubernetes.io/docs/concepts/workloads/autoscaling/horizontal-pod-autoscale/).
