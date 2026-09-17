@@ -3,11 +3,11 @@
     "redis-outage": {
       "apiReadinessDuringOutage": [
         {
-          "at": "2026-09-16T19:57:55.519763+00:00",
+          "at": "2026-09-17T03:11:01.053988+00:00",
           "ready": true
         },
         {
-          "at": "2026-09-16T19:57:59.198936+00:00",
+          "at": "2026-09-17T03:11:05.283741+00:00",
           "ready": true
         }
       ],
@@ -18,11 +18,11 @@
       "parallelTasksOverlapped": true,
       "paymentLedgerEntries": 1,
       "redisHealthyAfterRestore": true,
-      "redisRestoredAt": "2026-09-16T19:58:05.526222+00:00",
-      "redisStoppedAt": "2026-09-16T19:57:55.511001+00:00",
+      "redisRestoredAt": "2026-09-17T03:11:11.377909+00:00",
+      "redisStoppedAt": "2026-09-17T03:11:01.048515+00:00",
       "stoppedContainers": {
         "redis": [
-          "41ce3d270173f5908b00325d39cb3ea6b2a8eca418fb706b5a4cff07a6555707"
+          "eea9fe25de9b9c3808864af3bbe649da991fde1c5326db3733787263faf634cc"
         ]
       },
       "stoppedServices": [
@@ -32,12 +32,12 @@
       "taskCount": 9,
       "terminalStatus": "COMPLETED",
       "verified": true,
-      "workersReportedDuringOutage": 14,
-      "workflowId": "d9bad611-9769-48f3-90a6-7463f6990718",
-      "workflowLatencyMs": 3507.236957550049
+      "workersReportedDuringOutage": 19,
+      "workflowId": "6d4172ef-b121-494a-8853-53b98259dcf7",
+      "workflowLatencyMs": 3728.2121181488037
     },
     "restart": {
-      "apiOutageSecondsObserved": 4.183428791991901,
+      "apiOutageSecondsObserved": 3.6321321669965982,
       "attemptCount": 8,
       "dependencyEdgesChecked": 7,
       "duplicateSideEffectCount": 0,
@@ -46,14 +46,14 @@
       "historyEventsRecordedAfterRestart": 23,
       "paymentLedgerEntries": 1,
       "preRestartEventsRetained": 4,
-      "restartWallSeconds": 5.745262416021433,
-      "restartedAt": "2026-09-16T19:57:33.064377+00:00",
+      "restartWallSeconds": 5.240139125002315,
+      "restartedAt": "2026-09-17T03:10:39.118882+00:00",
       "restartedContainers": {
         "api": [
-          "dca262c1dac0d8b403f37a16ac51acfc2fab31a479736be5e7dde6016a9da394"
+          "5dfa3c0640de84dc5d3c1af59cdb494a2f0ef922aa9e6d7afacd612977ddc4d8"
         ],
         "scheduler": [
-          "eeaf33e9654327c28ba5b80be7161836c44933322cb42ae1180032543b75c5a5"
+          "329191c67531429a581716b94f49317ded889ec5e3a1cc0c182fbeb89d413647"
         ]
       },
       "restartedServices": [
@@ -73,8 +73,8 @@
       "tasksCompletedBeforeRestart": [],
       "terminalStatus": "COMPLETED",
       "verified": true,
-      "workflowId": "36b37755-02ce-4103-90de-bb41ba363248",
-      "workflowLatencyMs": 21976.0959148407
+      "workflowId": "49d3a0ca-960f-4f32-a19d-e0a6d23ca800",
+      "workflowLatencyMs": 21720.117807388306
     }
   },
   "configuration": {
@@ -89,8 +89,8 @@
     "width": 8
   },
   "errors": [],
-  "finishedAt": "2026-09-16T19:58:05.526342+00:00",
+  "finishedAt": "2026-09-17T03:11:11.377996+00:00",
   "schemaVersion": 1,
-  "startedAt": "2026-09-16T19:57:32.188386+00:00",
+  "startedAt": "2026-09-17T03:10:38.261546+00:00",
   "verified": true
 }

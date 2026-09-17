@@ -69,7 +69,7 @@ flowchart LR
 | `worker-service` | Kafka consumers, fenced claims, bounded execution, handlers, heartbeats, result persistence |
 | `shared` | Domain/event models, transactional state repository, Flyway migrations, outbox relay, coordination, metrics |
 | `frontend` | Live workflow list, DAG, task details, execution history, worker fleet, metrics, dead letters |
-| `load-tests` | Standard-library Python load generation, failure injection, and restart/Redis-degradation verification |
+| `load-tests` | Standard-library Python load generation with clock-validated throughput, failure injection, and restart/dependency-outage verification |
 | `docker`, `k8s`, `infra` | Local containers, Kubernetes manifests, AWS deployment configuration |
 
 Services are independently runnable and scalable, with deliberately shared database persistence code. This is a compact engine with clear runtime roles, not a claim of independent database ownership per service.
@@ -228,7 +228,7 @@ cd frontend && npm ci && npm run build
 
 To run a JVM directly, start infrastructure with `docker compose up -d postgres redis kafka`, run `mvn -DskipTests package`, then use `java -jar api-service/target/api-service-0.1.0-SNAPSHOT.jar`. The API defaults to port 8080 when run directly; set `PORT=8088` if needed. Scheduler and worker default to 8081/8082. Run each in a separate terminal and set a distinct PORT for additional local workers. The Vite dev server proxies `/api` and `/actuator` to `http://localhost:8080` by default; run `VITE_API_PROXY=http://localhost:8088 npm run dev` from `frontend` to target the Compose API instead.
 
-`mvn verify` runs 63 tests: 29 in `shared` (including 19 Testcontainers integration cases against real PostgreSQL and Kafka), 8 in `api-service`, 6 in `scheduler-service`, and 20 in `worker-service`.
+`mvn verify` runs 64 tests: 30 in `shared` (including 20 Testcontainers integration cases against real PostgreSQL and Kafka), 8 in `api-service`, 6 in `scheduler-service`, and 20 in `worker-service`. A further 14 deterministic tests cover the benchmark harness's clock validation and need no running stack: `cd load-tests && python3 -m unittest discover`. CI runs all 78 on every push.
 
 Tests cover cycles/disconnected graphs, dependency joins, global/workflow/type limits, admission fairness past the candidate batch, competing schedulers/claims, duplicate payment effects, stale-result fencing, heartbeat loss, independent deadlines, persisted results during broker delay, cancellation, retry exhaustion, database constraints/rollback, Kafka outbox replay, API validation, and worker handler/acknowledgement behavior. Docker is required for integration tests; they are not silently replaced by mocks.
 
@@ -263,13 +263,15 @@ Recorded in [benchmark-results.md](benchmark-results.md), with raw JSON in `load
 
 **Verified by execution on this machine (Apple M3 Pro, Docker 11 CPUs / 7.65 GiB, 2 worker replicas):**
 
-- `mvn verify` on Temurin 21 — 63 tests, 0 failures, 0 errors, 0 skipped, including 19 Testcontainers cases on real PostgreSQL and Kafka.
+- 78 tests, 0 failures, 0 errors, 0 skipped: `mvn verify` on Temurin 21 (64, including 20 Testcontainers cases on real PostgreSQL and Kafka) plus 14 harness clock-validation tests.
 - `docker compose up --build -d` — all 8 containers healthy; both Flyway migrations applied; 10 tables present; all four Kafka topics created with 12 partitions.
 - Frontend built (`tsc -b && vite build`, no errors) and served through its own nginx image; all dashboard views driven in headless Chromium with zero console errors, zero page errors, and no page-level horizontal overflow from 360 px to 1440 px.
 - Accessibility: axe-core 4.10.2 reports **0 violations** across all five views against WCAG 2.0/2.1 A and AA plus best-practice rules (29-40 rules passing per view). One decorative chevron remains flagged "needs review" because axe cannot measure contrast for glyph-only content.
-- Benchmarks, all `verified: true`: `normal` 1000 workflows / 5000 tasks, `high-concurrency` 100 × 20, `large-dag` 2 × 20 × 20 (15 200 dependency edges checked), `retry-storm` 100 × 10 (2000 backoff intervals checked). Zero duplicate payment side effects in every run.
+- Benchmarks, all `correctnessVerified` **and** `timingVerified`: `normal` 1000 workflows / 5000 tasks, `high-concurrency` 100 × 20, `large-dag` 2 × 20 × 20 (15 200 dependency edges checked), `retry-storm` 100 × 10 (2000 backoff intervals checked). Zero duplicate payment side effects in every run. The harness cross-checks its wall and monotonic clocks against the persisted database span and publishes no throughput unless they agree.
 - Chaos, `verified: true`: cycle rejection, real parallel overlap, timeout exhaustion into the dead-letter path, cancellation blocking a downstream payment, 10 duplicate Kafka records with a replayed execution ID producing no extra attempt or ledger row, and a SIGKILLed worker recovered by heartbeat expiry with the workflow completing.
-- Resilience, `verified: true`: API and scheduler restarted mid-execution with history intact and the workflow completing; a workflow submitted while Redis was stopped completing on PostgreSQL fencing alone.
+- Resilience and outages, all `verified: true`: API and scheduler restarted mid-execution with history intact; a workflow submitted while Redis was stopped completing on PostgreSQL fencing alone; a Kafka outage holding a durably persisted result whose attempt still read `RUNNING`, then draining on recovery; a PostgreSQL outage correctly failing readiness and recovering; and a **paused** worker recovered through deadline expiry rather than heartbeat loss.
+- Restart from a fully stopped stack: `docker compose down` then `up --build -d` reached eight healthy containers in 24.6 s with every durable row count identical and the Kafka topics intact.
+- Browser acceptance audit: 12 passed, 0 failed, 0 findings, 0 page errors in Chromium 152, including real submission and cancellation, dialog keyboard handling, injected 503/empty/loading states, and four viewport widths.
 
 **Not verified:**
 

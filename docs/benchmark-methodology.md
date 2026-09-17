@@ -51,7 +51,7 @@ The temporary-dependency failure is deterministic per task attempt, not a simula
 | `workflowsSubmitted` | POST requests with a successful response containing a workflow ID |
 | `workflowsCompleted` | Submitted workflows observed in `COMPLETED` |
 | `totalTasks` | Sum of submitted workflows' API-reported task counts |
-| `executionDurationSeconds` | Client `time.monotonic()` elapsed time from before initial metrics reads/submission until terminal polling ends; excludes post-run detailed verification |
+| `executionDurationSeconds` | Monotonic elapsed time from before submission until terminal polling ends; excludes setup and post-run verification. Reported alongside the wall-clock duration and the validation verdict in `timing`; see [Clock validation](#clock-validation) |
 | `workflowsPerSecond` | Completed workflows divided by execution duration |
 | `tasksPerSecond` | Successfully completed tasks in verified workflow details divided by execution duration |
 | `p50WorkflowLatencyMs`, `p95WorkflowLatencyMs` | Nearest-rank percentiles of persisted workflow `finishedAt - createdAt` for observed terminal workflows |
@@ -63,13 +63,33 @@ The temporary-dependency failure is deterministic per task attempt, not a simula
 
 Unavailable metrics are `null`, not zero. The ordinary benchmark does not kill workers, so its recovery metric is `null`. Task duration uses individual attempts; the task-level `startedAt` is the first start across all retries and measures a different interval. Percentiles are not averages of API-wide percentiles. A run with no successful task attempt has no successful-task duration percentile.
 
-**Clock limitation in the retained runs:** client monotonic execution durations disagree with the
-database wall-clock spans, including workflows whose durations exceed the reported whole-run
-duration. The cause is not established by the artifacts. `verified: true` checks execution
-correctness, not clock consistency, so it must not be interpreted as validation of those throughput
-figures. For future capacity measurements, record wall and monotonic timestamps at both execution
-boundaries, compare them with database spans, keep the host awake, and reject inconsistent timing
-runs. The current harness does not yet automate that clock-consistency check.
+## Clock validation
+
+Throughput is only meaningful if the measured duration is. An earlier set of runs derived duration
+from `time.monotonic()` alone, which on macOS does not advance while the host sleeps; idle sleep
+understated one run's duration by a factor of 2.2 and overstated its throughput. The harness now
+validates its own measurement and reports `correctnessVerified` and `timingVerified` separately,
+setting `workflowsPerSecond` and `tasksPerSecond` to `null` and exiting non-zero unless both hold.
+
+`benchmark_timing.ExecutionClock` samples wall and monotonic clocks together, bracketing each wall
+read between two monotonic reads so a pause during sampling is measurable. At every observation it
+adds `max(forward wall increment, forward monotonic increment, 0)` to the deadline, so a host
+suspend counts even when monotonic stalls, and a backward wall adjustment can never subtract
+elapsed time. A run is rejected when:
+
+- accumulated per-observation disagreement between the two clocks exceeds the budget, which catches
+  clocks that diverge and re-converge so the endpoints alone would look consistent;
+- either sampled clock moved backwards;
+- clock sampling was itself interrupted beyond the absolute budget;
+- the combined span of persisted database timestamps exceeds the client interval. A span is a
+  difference, so a constant client/server clock offset does not invalidate a run;
+- a persisted record has `finishedAt` before `startedAt`, or no persisted timestamps exist to
+  cross-check against.
+
+The budget is a declared measurement-quality policy — 250 ms absolute plus 0.1 % of the measured
+duration — not a claim about OS clock accuracy. Hold the host awake for capacity runs; on macOS,
+prefix the command with `caffeinate -i`. `load-tests/test_benchmark_timing.py` covers this logic
+deterministically with no running stack, and CI runs it on every push.
 
 Submission calls are never retried automatically. If an HTTP response is lost, the server may have created a workflow whose ID the client cannot recover; the failed request is recorded as an error and the run is not marked verified. This avoids silently creating extra workflows. Polling contributes read load and completion observation overhead to throughput. A deadline stops further polling; already-running HTTP calls are allowed to finish under their request timeout. Detailed post-run verification may extend total script runtime beyond the execution deadline.
 
@@ -128,8 +148,39 @@ stays `UP` — the readiness group is deliberately `readinessState` + `db` — t
 overlap, that dependency ordering holds, and that the ledger holds exactly one row. This exercises
 the documented degradation path only: the scheduler lease fails open to the PostgreSQL advisory lock
 and the worker status cache is advisory. It is not a test of Redis data durability, because Redis
-holds no authoritative state. Stopping PostgreSQL or Kafka is a different experiment and is not
-covered here.
+holds no authoritative state.
+
+Stopping the two authoritative dependencies, and pausing rather than killing a worker, are separate
+experiments in `outages.py`:
+
+```bash
+python3 load-tests/outages.py --scenario kafka --allow-service-restart \
+  --output load-tests/results/kafka-outage.json
+
+python3 load-tests/outages.py --scenario postgres --allow-service-restart \
+  --output load-tests/results/postgres-outage.json
+
+python3 load-tests/outages.py --scenario paused-worker --allow-service-restart \
+  --output load-tests/results/paused-worker.json
+```
+
+The Kafka check requires the opposite of the Redis check. Because dispatch and result application
+travel through the broker, execution must **stop** and then resume without loss: it asserts that a
+worker's result is durably persisted while its attempt still reads `RUNNING`, that readiness stays
+`UP` because Kafka is not in the readiness group, and that both the in-flight workflow and one
+submitted during the outage complete after recovery with one ledger row each.
+
+The PostgreSQL check asserts the reverse of both: readiness must report **unavailable**, since `db`
+is in the readiness group and the database is the authority. Recovery is then verified through
+workflow completion and history growth.
+
+The paused-worker check uses `docker pause`, which leaves connections established but stops the
+process. Heartbeat expiry alone would therefore be a weaker signal than for SIGKILL, so the check
+requires recovery through execution-deadline expiry, and asserts the superseded attempt is
+`TIMED_OUT` before the replacement completes on another worker.
+
+A network partition, a PostgreSQL failover, a disk-full condition, and multi-region recovery remain
+distinct experiments that none of these scripts cover.
 
 ## Retaining evidence
 

@@ -1,5 +1,5 @@
 {
-  "startedAt": "2026-09-17T02:47:07.053Z",
+  "startedAt": "2026-09-17T03:12:48.852Z",
   "baseUrl": "http://localhost:3000",
   "browser": "152.0.7977.76",
   "tests": [
@@ -14,7 +14,7 @@
       "name": "Workflow ID search reaches an execution outside the loaded page",
       "status": "passed",
       "detail": {
-        "olderExistingId": "19184830-80f4-41af-a1e0-71e558661871",
+        "olderExistingId": "c7d9882c-3118-40cc-80bb-7ca0d382553a",
         "rowsLoaded": 100,
         "displayed": true
       }
@@ -37,7 +37,7 @@
       "name": "Real workflow submission, automatic completion, DAG, task payload/result and history",
       "status": "passed",
       "detail": {
-        "workflowId": "8ffc954e-b9e2-4e29-bb13-19769575e40a",
+        "workflowId": "65d8c305-1ea6-4632-91d3-1385754ca507",
         "status": "COMPLETED",
         "nodes": 3,
         "edges": 2
@@ -47,7 +47,7 @@
       "name": "Real cancellation confirmation, keep-running and cancelled downstream task",
       "status": "passed",
       "detail": {
-        "workflowId": "609b5aa0-732f-4759-91f1-3b16e6ca21af",
+        "workflowId": "2844046d-55de-4a66-b3b3-25ef6917c547",
         "status": "CANCELLED"
       }
     },
@@ -55,7 +55,7 @@
       "name": "Workers live rows, metrics cards and Prometheus endpoint",
       "status": "passed",
       "detail": {
-        "registeredWorkers": 16,
+        "registeredWorkers": 19,
         "healthy": 2
       }
     },
@@ -63,7 +63,7 @@
       "name": "Dead letters live payload inspection and linked workflow",
       "status": "passed",
       "detail": {
-        "displayedDeadLetters": 3
+        "displayedDeadLetters": 4
       }
     },
     {
@@ -113,22 +113,22 @@
   "pageErrors": [],
   "workflows": [
     {
-      "id": "8ffc954e-b9e2-4e29-bb13-19769575e40a",
-      "name": "Dashboard audit completed 1789613228669",
+      "id": "65d8c305-1ea6-4632-91d3-1385754ca507",
+      "name": "Dashboard audit completed 1789614770521",
       "status": "PENDING",
       "concurrencyLimit": 2,
-      "createdAt": "2026-09-17T02:47:08.765424Z",
+      "createdAt": "2026-09-17T03:12:50.613181Z",
       "startedAt": null,
       "finishedAt": null,
       "totalTasks": 3,
       "completedTasks": 0
     },
     {
-      "id": "609b5aa0-732f-4759-91f1-3b16e6ca21af",
-      "name": "Dashboard audit cancelled 1789613233330",
+      "id": "2844046d-55de-4a66-b3b3-25ef6917c547",
+      "name": "Dashboard audit cancelled 1789614775207",
       "status": "PENDING",
       "concurrencyLimit": 1,
-      "createdAt": "2026-09-17T02:47:13.412477Z",
+      "createdAt": "2026-09-17T03:12:55.290754Z",
       "startedAt": null,
       "finishedAt": null,
       "totalTasks": 2,
@@ -254,8 +254,8 @@
     "empty arrays and500ms loading delays",
     "metrics503 connection state and recovery"
   ],
-  "liveMutationTestsFinishedAt": "2026-09-17T02:47:13.923Z",
-  "finishedAt": "2026-09-17T02:47:26.120Z",
+  "liveMutationTestsFinishedAt": "2026-09-17T03:12:55.780Z",
+  "finishedAt": "2026-09-17T03:13:08.082Z",
   "summary": {
     "passed": 12,
     "failed": 0,
