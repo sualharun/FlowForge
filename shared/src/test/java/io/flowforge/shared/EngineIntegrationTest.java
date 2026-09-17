@@ -275,6 +275,17 @@ class EngineIntegrationTest {
         assertThat(store.workflows(100,0)).isEmpty();
     }
 
+    @Test void payloadLimitCountsUtf8BytesAndRollsBackOversizedUnicode() {
+        var oversized=new WorkflowDefinition.TaskDefinition("unicode","DATA_TRANSFORM",
+                Map.of("data","€".repeat(22000)),List.of(),1000L,0,1000L,2d);
+        assertThatThrownBy(()->submit(1,oversized)).hasMessageContaining("64 KiB");
+        assertThat(store.workflows(100,0)).isEmpty();
+        var withinLimit=new WorkflowDefinition.TaskDefinition("unicode","DATA_TRANSFORM",
+                Map.of("data","€".repeat(21000)),List.of(),1000L,0,1000L,2d);
+        UUID id=submit(1,withinLimit);
+        assertThat(store.tasks(id)).hasSize(1);
+    }
+
     @Test void repositoryRejectsCrossWorkflowDependency() {
         UUID first=submit(1,task("first","DELAY",0));UUID second=submit(1,task("second","DELAY",0));
         assertThatThrownBy(()->db.update("INSERT INTO task_dependencies(workflow_id,task_id,parent_task_id) VALUES (?,?,?)",first,task(first,"first").get("id"),task(second,"second").get("id")))

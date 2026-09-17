@@ -1,0 +1,265 @@
+{
+  "startedAt": "2026-09-17T02:47:07.053Z",
+  "baseUrl": "http://localhost:3000",
+  "browser": "152.0.7977.76",
+  "tests": [
+    {
+      "name": "Workflow list matches live API, name search, ID search and status filter",
+      "status": "passed",
+      "detail": {
+        "returned": 100
+      }
+    },
+    {
+      "name": "Workflow ID search reaches an execution outside the loaded page",
+      "status": "passed",
+      "detail": {
+        "olderExistingId": "19184830-80f4-41af-a1e0-71e558661871",
+        "rowsLoaded": 100,
+        "displayed": true
+      }
+    },
+    {
+      "name": "Submit dialog focus, tab containment, Escape and restored focus",
+      "status": "passed",
+      "detail": {
+        "focusRestored": true
+      }
+    },
+    {
+      "name": "JSON syntax/object validation and backend cycle validation",
+      "status": "passed",
+      "detail": {
+        "cycleError": "Workflow contains a dependency cycle"
+      }
+    },
+    {
+      "name": "Real workflow submission, automatic completion, DAG, task payload/result and history",
+      "status": "passed",
+      "detail": {
+        "workflowId": "8ffc954e-b9e2-4e29-bb13-19769575e40a",
+        "status": "COMPLETED",
+        "nodes": 3,
+        "edges": 2
+      }
+    },
+    {
+      "name": "Real cancellation confirmation, keep-running and cancelled downstream task",
+      "status": "passed",
+      "detail": {
+        "workflowId": "609b5aa0-732f-4759-91f1-3b16e6ca21af",
+        "status": "CANCELLED"
+      }
+    },
+    {
+      "name": "Workers live rows, metrics cards and Prometheus endpoint",
+      "status": "passed",
+      "detail": {
+        "registeredWorkers": 16,
+        "healthy": 2
+      }
+    },
+    {
+      "name": "Dead letters live payload inspection and linked workflow",
+      "status": "passed",
+      "detail": {
+        "displayedDeadLetters": 3
+      }
+    },
+    {
+      "name": "Responsive views and dialogs at360,390,768,1440 without page horizontal panning",
+      "status": "passed",
+      "detail": {
+        "widths": [
+          360,
+          390,
+          768,
+          1440
+        ],
+        "screenshots": "/Users/sualharun/Documents/ChatGPT/Astra/.run/dashboard-audit/screenshots"
+      }
+    },
+    {
+      "name": "Explicitly injected503 retains stale workflow snapshot and Retry recovers",
+      "status": "passed",
+      "detail": {
+        "retainedRows": 100
+      }
+    },
+    {
+      "name": "Injected empty/loading states for workflows, workers and dead letters",
+      "status": "passed"
+    },
+    {
+      "name": "Injected API outage visible in global connection state",
+      "status": "passed"
+    }
+  ],
+  "findings": [],
+  "consoleErrors": [
+    {
+      "phase": "live",
+      "text": "Failed to load resource: the server responded with a status of 400 ()"
+    },
+    {
+      "phase": "mocked-ui",
+      "text": "Failed to load resource: the server responded with a status of 503 (Service Unavailable)"
+    },
+    {
+      "phase": "mocked-ui",
+      "text": "Failed to load resource: the server responded with a status of 503 (Service Unavailable)"
+    }
+  ],
+  "pageErrors": [],
+  "workflows": [
+    {
+      "id": "8ffc954e-b9e2-4e29-bb13-19769575e40a",
+      "name": "Dashboard audit completed 1789613228669",
+      "status": "PENDING",
+      "concurrencyLimit": 2,
+      "createdAt": "2026-09-17T02:47:08.765424Z",
+      "startedAt": null,
+      "finishedAt": null,
+      "totalTasks": 3,
+      "completedTasks": 0
+    },
+    {
+      "id": "609b5aa0-732f-4759-91f1-3b16e6ca21af",
+      "name": "Dashboard audit cancelled 1789613233330",
+      "status": "PENDING",
+      "concurrencyLimit": 1,
+      "createdAt": "2026-09-17T02:47:13.412477Z",
+      "startedAt": null,
+      "finishedAt": null,
+      "totalTasks": 2,
+      "completedTasks": 0
+    }
+  ],
+  "responsive": [
+    {
+      "width": 360,
+      "view": "Workflows",
+      "innerWidth": 360,
+      "scrollWidth": 360,
+      "scrollX": 0
+    },
+    {
+      "width": 360,
+      "view": "Workers",
+      "innerWidth": 360,
+      "scrollWidth": 360,
+      "scrollX": 0
+    },
+    {
+      "width": 360,
+      "view": "Metrics",
+      "innerWidth": 360,
+      "scrollWidth": 360,
+      "scrollX": 0
+    },
+    {
+      "width": 360,
+      "view": "Dead letters",
+      "innerWidth": 360,
+      "scrollWidth": 360,
+      "scrollX": 0
+    },
+    {
+      "width": 390,
+      "view": "Workflows",
+      "innerWidth": 390,
+      "scrollWidth": 390,
+      "scrollX": 0
+    },
+    {
+      "width": 390,
+      "view": "Workers",
+      "innerWidth": 390,
+      "scrollWidth": 390,
+      "scrollX": 0
+    },
+    {
+      "width": 390,
+      "view": "Metrics",
+      "innerWidth": 390,
+      "scrollWidth": 390,
+      "scrollX": 0
+    },
+    {
+      "width": 390,
+      "view": "Dead letters",
+      "innerWidth": 390,
+      "scrollWidth": 390,
+      "scrollX": 0
+    },
+    {
+      "width": 768,
+      "view": "Workflows",
+      "innerWidth": 768,
+      "scrollWidth": 768,
+      "scrollX": 0
+    },
+    {
+      "width": 768,
+      "view": "Workers",
+      "innerWidth": 768,
+      "scrollWidth": 768,
+      "scrollX": 0
+    },
+    {
+      "width": 768,
+      "view": "Metrics",
+      "innerWidth": 768,
+      "scrollWidth": 768,
+      "scrollX": 0
+    },
+    {
+      "width": 768,
+      "view": "Dead letters",
+      "innerWidth": 768,
+      "scrollWidth": 768,
+      "scrollX": 0
+    },
+    {
+      "width": 1440,
+      "view": "Workflows",
+      "innerWidth": 1440,
+      "scrollWidth": 1440,
+      "scrollX": 0
+    },
+    {
+      "width": 1440,
+      "view": "Workers",
+      "innerWidth": 1440,
+      "scrollWidth": 1440,
+      "scrollX": 0
+    },
+    {
+      "width": 1440,
+      "view": "Metrics",
+      "innerWidth": 1440,
+      "scrollWidth": 1440,
+      "scrollX": 0
+    },
+    {
+      "width": 1440,
+      "view": "Dead letters",
+      "innerWidth": 1440,
+      "scrollWidth": 1440,
+      "scrollX": 0
+    }
+  ],
+  "mockedUiScenarios": [
+    "503 stale snapshot and recovery",
+    "empty arrays and500ms loading delays",
+    "metrics503 connection state and recovery"
+  ],
+  "liveMutationTestsFinishedAt": "2026-09-17T02:47:13.923Z",
+  "finishedAt": "2026-09-17T02:47:26.120Z",
+  "summary": {
+    "passed": 12,
+    "failed": 0,
+    "findings": 0,
+    "livePageErrors": 0
+  }
+}

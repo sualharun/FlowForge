@@ -1,0 +1,625 @@
+{
+  "checks": {
+    "kafka": {
+      "outageMetrics": {
+        "activeWorkers": 2,
+        "deadLetterCount": 3,
+        "p50TaskDurationMs": 98.272,
+        "p95TaskDurationMs": 556.276,
+        "paymentSideEffects": 4055,
+        "pendingOutboxMessages": 2,
+        "queueDepth": 1,
+        "retryRate": 0.18297678652708238,
+        "taskSuccessRate": 0.816836641777454,
+        "tasksPerMinute": 3,
+        "workflowsCompleted": 2469,
+        "workflowsFailed": 3,
+        "workflowsSubmitted": 2482
+      },
+      "readinessDuringOutage": {
+        "status": "UP"
+      },
+      "recovered": [
+        {
+          "attempts": [
+            {
+              "attemptNumber": 1,
+              "createdAt": "2026-09-17T02:47:37.646794Z",
+              "deadline": "2026-09-17T02:48:07.676325Z",
+              "error": null,
+              "executionId": "761c5806-7996-4dd7-bc56-d4747243791f",
+              "finishedAt": "2026-09-17T02:47:43.963791Z",
+              "resultPayload": {
+                "completedAt": "2026-09-17T02:47:41.682273252Z",
+                "error": null,
+                "executionId": "761c5806-7996-4dd7-bc56-d4747243791f",
+                "output": {
+                  "sleptMs": 4000
+                },
+                "retryable": false,
+                "status": "COMPLETED",
+                "taskId": "b14babc8-02b9-4528-a6b5-e23946c94406",
+                "workerId": "141b2b25-6aef-46e5-9a8e-decd3f3362fa",
+                "workflowId": "c95ef4d8-455d-43bc-81f2-8d9e4ec4f857"
+              },
+              "resultReceivedAt": "2026-09-17T02:47:41.700406Z",
+              "startedAt": "2026-09-17T02:47:37.676325Z",
+              "status": "COMPLETED",
+              "taskId": "b14babc8-02b9-4528-a6b5-e23946c94406",
+              "workerId": "141b2b25-6aef-46e5-9a8e-decd3f3362fa"
+            },
+            {
+              "attemptNumber": 1,
+              "createdAt": "2026-09-17T02:47:44.211628Z",
+              "deadline": "2026-09-17T02:48:14.691281Z",
+              "error": null,
+              "executionId": "216d693e-a521-4dfd-9d7e-28a52789c118",
+              "finishedAt": "2026-09-17T02:47:44.728712Z",
+              "resultPayload": {
+                "completedAt": "2026-09-17T02:47:44.701658295Z",
+                "error": null,
+                "executionId": "216d693e-a521-4dfd-9d7e-28a52789c118",
+                "output": {
+                  "amount": 1.0,
+                  "currency": "USD",
+                  "orderId": "985b829c-885c-4e1b-be60-dc29b094cfab",
+                  "paymentId": "fd5b0c5d-aaba-4226-b61a-829977ad3666"
+                },
+                "retryable": false,
+                "status": "COMPLETED",
+                "taskId": "985b829c-885c-4e1b-be60-dc29b094cfab",
+                "workerId": "2de413fb-f121-4ada-a870-48738132d841",
+                "workflowId": "c95ef4d8-455d-43bc-81f2-8d9e4ec4f857"
+              },
+              "resultReceivedAt": "2026-09-17T02:47:44.702395Z",
+              "startedAt": "2026-09-17T02:47:44.691281Z",
+              "status": "COMPLETED",
+              "taskId": "985b829c-885c-4e1b-be60-dc29b094cfab",
+              "workerId": "2de413fb-f121-4ada-a870-48738132d841"
+            }
+          ],
+          "dependencyEdgesChecked": 1,
+          "payments": [
+            {
+              "amount": 1.0,
+              "createdAt": "2026-09-17T02:47:44.698448Z",
+              "currency": "USD",
+              "orderId": "985b829c-885c-4e1b-be60-dc29b094cfab",
+              "paymentId": "fd5b0c5d-aaba-4226-b61a-829977ad3666",
+              "taskId": "985b829c-885c-4e1b-be60-dc29b094cfab",
+              "workflowId": "c95ef4d8-455d-43bc-81f2-8d9e4ec4f857"
+            }
+          ],
+          "tasks": [
+            {
+              "attemptCount": 1,
+              "backoffMultiplier": 2.0,
+              "createdAt": "2026-09-17T02:47:37.561171Z",
+              "dependencies": [],
+              "executionId": "761c5806-7996-4dd7-bc56-d4747243791f",
+              "finishedAt": "2026-09-17T02:47:43.963940Z",
+              "id": "b14babc8-02b9-4528-a6b5-e23946c94406",
+              "initialRetryDelayMs": 100,
+              "maxRetries": 3,
+              "name": "wait",
+              "nextRunAt": "2026-09-17T02:47:37.561171Z",
+              "payload": {
+                "durationMs": 4000
+              },
+              "result": {
+                "sleptMs": 4000
+              },
+              "startedAt": "2026-09-17T02:47:37.676325Z",
+              "status": "COMPLETED",
+              "taskType": "DELAY",
+              "timeoutMs": 30000,
+              "workerId": "141b2b25-6aef-46e5-9a8e-decd3f3362fa",
+              "workflowId": "c95ef4d8-455d-43bc-81f2-8d9e4ec4f857"
+            },
+            {
+              "attemptCount": 1,
+              "backoffMultiplier": 2.0,
+              "createdAt": "2026-09-17T02:47:37.561751Z",
+              "dependencies": [
+                "b14babc8-02b9-4528-a6b5-e23946c94406"
+              ],
+              "executionId": "216d693e-a521-4dfd-9d7e-28a52789c118",
+              "finishedAt": "2026-09-17T02:47:44.728912Z",
+              "id": "985b829c-885c-4e1b-be60-dc29b094cfab",
+              "initialRetryDelayMs": 100,
+              "maxRetries": 3,
+              "name": "charge",
+              "nextRunAt": "2026-09-17T02:47:37.561751Z",
+              "payload": {
+                "amount": 1,
+                "currency": "USD"
+              },
+              "result": {
+                "amount": 1.0,
+                "currency": "USD",
+                "orderId": "985b829c-885c-4e1b-be60-dc29b094cfab",
+                "paymentId": "fd5b0c5d-aaba-4226-b61a-829977ad3666"
+              },
+              "startedAt": "2026-09-17T02:47:44.691281Z",
+              "status": "COMPLETED",
+              "taskType": "MOCK_PAYMENT",
+              "timeoutMs": 30000,
+              "workerId": "2de413fb-f121-4ada-a870-48738132d841",
+              "workflowId": "c95ef4d8-455d-43bc-81f2-8d9e4ec4f857"
+            }
+          ],
+          "workflow": {
+            "completedTasks": 2,
+            "concurrencyLimit": 8,
+            "createdAt": "2026-09-17T02:47:37.560642Z",
+            "finishedAt": "2026-09-17T02:47:44.729608Z",
+            "id": "c95ef4d8-455d-43bc-81f2-8d9e4ec4f857",
+            "name": "audit-kafka-369c677e",
+            "startedAt": "2026-09-17T02:47:37.645470Z",
+            "status": "COMPLETED",
+            "totalTasks": 2
+          }
+        },
+        {
+          "attempts": [
+            {
+              "attemptNumber": 1,
+              "createdAt": "2026-09-17T02:47:39.158466Z",
+              "deadline": "2026-09-17T02:48:14.567776Z",
+              "error": null,
+              "executionId": "72a53433-9429-4639-9dd2-b1b14ace8d94",
+              "finishedAt": "2026-09-17T02:47:44.623619Z",
+              "resultPayload": {
+                "completedAt": "2026-09-17T02:47:44.575342379Z",
+                "error": null,
+                "executionId": "72a53433-9429-4639-9dd2-b1b14ace8d94",
+                "output": {
+                  "amount": 2.0,
+                  "currency": "USD",
+                  "orderId": "381a8c2f-d152-4240-af34-7ed421581b49",
+                  "paymentId": "f7e299e7-a1a0-4633-991c-7c726993ae5f"
+                },
+                "retryable": false,
+                "status": "COMPLETED",
+                "taskId": "381a8c2f-d152-4240-af34-7ed421581b49",
+                "workerId": "141b2b25-6aef-46e5-9a8e-decd3f3362fa",
+                "workflowId": "a5c89bb2-7399-4904-a848-49006e8856f6"
+              },
+              "resultReceivedAt": "2026-09-17T02:47:44.575809Z",
+              "startedAt": "2026-09-17T02:47:44.567776Z",
+              "status": "COMPLETED",
+              "taskId": "381a8c2f-d152-4240-af34-7ed421581b49",
+              "workerId": "141b2b25-6aef-46e5-9a8e-decd3f3362fa"
+            }
+          ],
+          "dependencyEdgesChecked": 0,
+          "payments": [
+            {
+              "amount": 2.0,
+              "createdAt": "2026-09-17T02:47:44.572887Z",
+              "currency": "USD",
+              "orderId": "381a8c2f-d152-4240-af34-7ed421581b49",
+              "paymentId": "f7e299e7-a1a0-4633-991c-7c726993ae5f",
+              "taskId": "381a8c2f-d152-4240-af34-7ed421581b49",
+              "workflowId": "a5c89bb2-7399-4904-a848-49006e8856f6"
+            }
+          ],
+          "tasks": [
+            {
+              "attemptCount": 1,
+              "backoffMultiplier": 2.0,
+              "createdAt": "2026-09-17T02:47:39.082357Z",
+              "dependencies": [],
+              "executionId": "72a53433-9429-4639-9dd2-b1b14ace8d94",
+              "finishedAt": "2026-09-17T02:47:44.623945Z",
+              "id": "381a8c2f-d152-4240-af34-7ed421581b49",
+              "initialRetryDelayMs": 100,
+              "maxRetries": 3,
+              "name": "charge",
+              "nextRunAt": "2026-09-17T02:47:39.082357Z",
+              "payload": {
+                "amount": 2,
+                "currency": "USD"
+              },
+              "result": {
+                "amount": 2.0,
+                "currency": "USD",
+                "orderId": "381a8c2f-d152-4240-af34-7ed421581b49",
+                "paymentId": "f7e299e7-a1a0-4633-991c-7c726993ae5f"
+              },
+              "startedAt": "2026-09-17T02:47:44.567776Z",
+              "status": "COMPLETED",
+              "taskType": "MOCK_PAYMENT",
+              "timeoutMs": 30000,
+              "workerId": "141b2b25-6aef-46e5-9a8e-decd3f3362fa",
+              "workflowId": "a5c89bb2-7399-4904-a848-49006e8856f6"
+            }
+          ],
+          "workflow": {
+            "completedTasks": 1,
+            "concurrencyLimit": 8,
+            "createdAt": "2026-09-17T02:47:39.082022Z",
+            "finishedAt": "2026-09-17T02:47:44.625444Z",
+            "id": "a5c89bb2-7399-4904-a848-49006e8856f6",
+            "name": "audit-during-kafka-outage",
+            "startedAt": "2026-09-17T02:47:39.157936Z",
+            "status": "COMPLETED",
+            "totalTasks": 1
+          }
+        }
+      ],
+      "resultDurableDuringOutage": [
+        {
+          "attemptNumber": 1,
+          "createdAt": "2026-09-17T02:47:37.646794Z",
+          "deadline": "2026-09-17T02:48:07.676325Z",
+          "error": null,
+          "executionId": "761c5806-7996-4dd7-bc56-d4747243791f",
+          "finishedAt": null,
+          "resultPayload": {
+            "completedAt": "2026-09-17T02:47:41.682273252Z",
+            "error": null,
+            "executionId": "761c5806-7996-4dd7-bc56-d4747243791f",
+            "output": {
+              "sleptMs": 4000
+            },
+            "retryable": false,
+            "status": "COMPLETED",
+            "taskId": "b14babc8-02b9-4528-a6b5-e23946c94406",
+            "workerId": "141b2b25-6aef-46e5-9a8e-decd3f3362fa",
+            "workflowId": "c95ef4d8-455d-43bc-81f2-8d9e4ec4f857"
+          },
+          "resultReceivedAt": "2026-09-17T02:47:41.700406Z",
+          "startedAt": "2026-09-17T02:47:37.676325Z",
+          "status": "RUNNING",
+          "taskId": "b14babc8-02b9-4528-a6b5-e23946c94406",
+          "workerId": "141b2b25-6aef-46e5-9a8e-decd3f3362fa"
+        }
+      ],
+      "verified": true
+    },
+    "paused-worker": {
+      "oldAttemptStatus": "TIMED_OUT",
+      "oldExecutionId": "13ac8bdc-e4c1-4a98-94e9-622b833740e2",
+      "pausedContainer": "259e814927a64e48a30159f754335a1f1ef7f7bf5b514d812d3ee92e6f262cfd",
+      "recovered": {
+        "attempts": [
+          {
+            "attemptNumber": 1,
+            "createdAt": "2026-09-17T02:47:57.796081Z",
+            "deadline": "2026-09-17T02:48:07.842940Z",
+            "error": "Execution deadline exceeded",
+            "executionId": "13ac8bdc-e4c1-4a98-94e9-622b833740e2",
+            "finishedAt": "2026-09-17T02:48:07.911275Z",
+            "resultPayload": null,
+            "resultReceivedAt": null,
+            "startedAt": "2026-09-17T02:47:57.842940Z",
+            "status": "TIMED_OUT",
+            "taskId": "fa4bb95c-429a-4f29-b4e6-93a5fb892e6b",
+            "workerId": "141b2b25-6aef-46e5-9a8e-decd3f3362fa"
+          },
+          {
+            "attemptNumber": 2,
+            "createdAt": "2026-09-17T02:48:08.419129Z",
+            "deadline": "2026-09-17T02:48:54.260763Z",
+            "error": null,
+            "executionId": "bf86ebe5-5c8a-4413-aeea-d1bdc56e0f01",
+            "finishedAt": "2026-09-17T02:48:52.358459Z",
+            "resultPayload": {
+              "completedAt": "2026-09-17T02:48:52.266451966Z",
+              "error": null,
+              "executionId": "bf86ebe5-5c8a-4413-aeea-d1bdc56e0f01",
+              "output": {
+                "sleptMs": 8000
+              },
+              "retryable": false,
+              "status": "COMPLETED",
+              "taskId": "fa4bb95c-429a-4f29-b4e6-93a5fb892e6b",
+              "workerId": "2de413fb-f121-4ada-a870-48738132d841",
+              "workflowId": "c73f53e0-eb58-454e-b053-f0b0969d6ab9"
+            },
+            "resultReceivedAt": "2026-09-17T02:48:52.267328Z",
+            "startedAt": "2026-09-17T02:48:44.260763Z",
+            "status": "COMPLETED",
+            "taskId": "fa4bb95c-429a-4f29-b4e6-93a5fb892e6b",
+            "workerId": "2de413fb-f121-4ada-a870-48738132d841"
+          },
+          {
+            "attemptNumber": 1,
+            "createdAt": "2026-09-17T02:48:52.424227Z",
+            "deadline": "2026-09-17T02:49:22.461244Z",
+            "error": null,
+            "executionId": "1e33f36a-4209-402e-8948-49d3b9479bc7",
+            "finishedAt": "2026-09-17T02:48:52.563606Z",
+            "resultPayload": {
+              "completedAt": "2026-09-17T02:48:52.464826132Z",
+              "error": null,
+              "executionId": "1e33f36a-4209-402e-8948-49d3b9479bc7",
+              "output": {
+                "amount": 1.0,
+                "currency": "USD",
+                "orderId": "9a47c386-febb-412a-9c49-05566ce6c9b4",
+                "paymentId": "4d2ff1e4-4dbe-4291-83cc-5c6dd0ac1391"
+              },
+              "retryable": false,
+              "status": "COMPLETED",
+              "taskId": "9a47c386-febb-412a-9c49-05566ce6c9b4",
+              "workerId": "2de413fb-f121-4ada-a870-48738132d841",
+              "workflowId": "c73f53e0-eb58-454e-b053-f0b0969d6ab9"
+            },
+            "resultReceivedAt": "2026-09-17T02:48:52.465203Z",
+            "startedAt": "2026-09-17T02:48:52.461244Z",
+            "status": "COMPLETED",
+            "taskId": "9a47c386-febb-412a-9c49-05566ce6c9b4",
+            "workerId": "2de413fb-f121-4ada-a870-48738132d841"
+          }
+        ],
+        "dependencyEdgesChecked": 1,
+        "payments": [
+          {
+            "amount": 1.0,
+            "createdAt": "2026-09-17T02:48:52.464151Z",
+            "currency": "USD",
+            "orderId": "9a47c386-febb-412a-9c49-05566ce6c9b4",
+            "paymentId": "4d2ff1e4-4dbe-4291-83cc-5c6dd0ac1391",
+            "taskId": "9a47c386-febb-412a-9c49-05566ce6c9b4",
+            "workflowId": "c73f53e0-eb58-454e-b053-f0b0969d6ab9"
+          }
+        ],
+        "tasks": [
+          {
+            "attemptCount": 2,
+            "backoffMultiplier": 2.0,
+            "createdAt": "2026-09-17T02:47:57.620713Z",
+            "dependencies": [],
+            "executionId": "bf86ebe5-5c8a-4413-aeea-d1bdc56e0f01",
+            "finishedAt": "2026-09-17T02:48:52.358613Z",
+            "id": "fa4bb95c-429a-4f29-b4e6-93a5fb892e6b",
+            "initialRetryDelayMs": 100,
+            "maxRetries": 3,
+            "name": "wait",
+            "nextRunAt": "2026-09-17T02:48:08.011963Z",
+            "payload": {
+              "durationMs": 8000
+            },
+            "result": {
+              "sleptMs": 8000
+            },
+            "startedAt": "2026-09-17T02:47:57.842940Z",
+            "status": "COMPLETED",
+            "taskType": "DELAY",
+            "timeoutMs": 10000,
+            "workerId": "2de413fb-f121-4ada-a870-48738132d841",
+            "workflowId": "c73f53e0-eb58-454e-b053-f0b0969d6ab9"
+          },
+          {
+            "attemptCount": 1,
+            "backoffMultiplier": 2.0,
+            "createdAt": "2026-09-17T02:47:57.621074Z",
+            "dependencies": [
+              "fa4bb95c-429a-4f29-b4e6-93a5fb892e6b"
+            ],
+            "executionId": "1e33f36a-4209-402e-8948-49d3b9479bc7",
+            "finishedAt": "2026-09-17T02:48:52.563893Z",
+            "id": "9a47c386-febb-412a-9c49-05566ce6c9b4",
+            "initialRetryDelayMs": 100,
+            "maxRetries": 3,
+            "name": "charge",
+            "nextRunAt": "2026-09-17T02:47:57.621074Z",
+            "payload": {
+              "amount": 1,
+              "currency": "USD"
+            },
+            "result": {
+              "amount": 1.0,
+              "currency": "USD",
+              "orderId": "9a47c386-febb-412a-9c49-05566ce6c9b4",
+              "paymentId": "4d2ff1e4-4dbe-4291-83cc-5c6dd0ac1391"
+            },
+            "startedAt": "2026-09-17T02:48:52.461244Z",
+            "status": "COMPLETED",
+            "taskType": "MOCK_PAYMENT",
+            "timeoutMs": 30000,
+            "workerId": "2de413fb-f121-4ada-a870-48738132d841",
+            "workflowId": "c73f53e0-eb58-454e-b053-f0b0969d6ab9"
+          }
+        ],
+        "workflow": {
+          "completedTasks": 2,
+          "concurrencyLimit": 8,
+          "createdAt": "2026-09-17T02:47:57.620279Z",
+          "finishedAt": "2026-09-17T02:48:52.564724Z",
+          "id": "c73f53e0-eb58-454e-b053-f0b0969d6ab9",
+          "name": "audit-paused-worker-17099866",
+          "startedAt": "2026-09-17T02:47:57.794843Z",
+          "status": "COMPLETED",
+          "totalTasks": 2
+        }
+      },
+      "verified": true
+    },
+    "postgres": {
+      "historyAfter": 13,
+      "historyBefore": 4,
+      "readinessUnavailableDuringOutage": true,
+      "recovered": {
+        "attempts": [
+          {
+            "attemptNumber": 1,
+            "createdAt": "2026-09-17T02:47:45.222619Z",
+            "deadline": "2026-09-17T02:47:57.239773Z",
+            "error": "PreparedStatementCallback; SQL [SELECT count(*) FROM workflow_tasks t JOIN workflows w ON w.id=t.workflow_id\nWHERE t.execution_id=? AND t.worker_id=? AND t.status='RUNNING' AND w.status='RUNNING'\n]; FATAL: terminating connection due to administrator command",
+            "executionId": "2ddc5238-da19-47b0-a4f8-2389b1ccb7ff",
+            "finishedAt": "2026-09-17T02:47:48.666074Z",
+            "resultPayload": {
+              "completedAt": "2026-09-17T02:47:45.498764129Z",
+              "error": "PreparedStatementCallback; SQL [SELECT count(*) FROM workflow_tasks t JOIN workflows w ON w.id=t.workflow_id\nWHERE t.execution_id=? AND t.worker_id=? AND t.status='RUNNING' AND w.status='RUNNING'\n]; FATAL: terminating connection due to administrator command",
+              "executionId": "2ddc5238-da19-47b0-a4f8-2389b1ccb7ff",
+              "output": {},
+              "retryable": true,
+              "status": "FAILED",
+              "taskId": "23c1749a-b03b-42bf-9620-b93eb9968455",
+              "workerId": "2de413fb-f121-4ada-a870-48738132d841",
+              "workflowId": "9b736abd-81c6-4888-8014-1618fe0a2ab4"
+            },
+            "resultReceivedAt": "2026-09-17T02:47:47.843429Z",
+            "startedAt": "2026-09-17T02:47:45.239773Z",
+            "status": "FAILED",
+            "taskId": "23c1749a-b03b-42bf-9620-b93eb9968455",
+            "workerId": "2de413fb-f121-4ada-a870-48738132d841"
+          },
+          {
+            "attemptNumber": 2,
+            "createdAt": "2026-09-17T02:47:49.175974Z",
+            "deadline": "2026-09-17T02:48:01.243052Z",
+            "error": null,
+            "executionId": "3b7da7e4-1a2a-46d5-99b4-a293fce532e3",
+            "finishedAt": "2026-09-17T02:47:57.274801Z",
+            "resultPayload": {
+              "completedAt": "2026-09-17T02:47:57.249394885Z",
+              "error": null,
+              "executionId": "3b7da7e4-1a2a-46d5-99b4-a293fce532e3",
+              "output": {
+                "sleptMs": 8000
+              },
+              "retryable": false,
+              "status": "COMPLETED",
+              "taskId": "23c1749a-b03b-42bf-9620-b93eb9968455",
+              "workerId": "141b2b25-6aef-46e5-9a8e-decd3f3362fa",
+              "workflowId": "9b736abd-81c6-4888-8014-1618fe0a2ab4"
+            },
+            "resultReceivedAt": "2026-09-17T02:47:57.251084Z",
+            "startedAt": "2026-09-17T02:47:49.243052Z",
+            "status": "COMPLETED",
+            "taskId": "23c1749a-b03b-42bf-9620-b93eb9968455",
+            "workerId": "141b2b25-6aef-46e5-9a8e-decd3f3362fa"
+          },
+          {
+            "attemptNumber": 1,
+            "createdAt": "2026-09-17T02:47:57.286830Z",
+            "deadline": "2026-09-17T02:48:27.334550Z",
+            "error": null,
+            "executionId": "7da42ef5-11b8-4e86-865f-e6b27ca06047",
+            "finishedAt": "2026-09-17T02:47:57.377296Z",
+            "resultPayload": {
+              "completedAt": "2026-09-17T02:47:57.342136385Z",
+              "error": null,
+              "executionId": "7da42ef5-11b8-4e86-865f-e6b27ca06047",
+              "output": {
+                "amount": 1.0,
+                "currency": "USD",
+                "orderId": "382b836d-5cde-4046-8a2d-39df975c9ff0",
+                "paymentId": "fd94efe2-9509-4329-882c-d394f889f005"
+              },
+              "retryable": false,
+              "status": "COMPLETED",
+              "taskId": "382b836d-5cde-4046-8a2d-39df975c9ff0",
+              "workerId": "2de413fb-f121-4ada-a870-48738132d841",
+              "workflowId": "9b736abd-81c6-4888-8014-1618fe0a2ab4"
+            },
+            "resultReceivedAt": "2026-09-17T02:47:57.342996Z",
+            "startedAt": "2026-09-17T02:47:57.334550Z",
+            "status": "COMPLETED",
+            "taskId": "382b836d-5cde-4046-8a2d-39df975c9ff0",
+            "workerId": "2de413fb-f121-4ada-a870-48738132d841"
+          }
+        ],
+        "dependencyEdgesChecked": 1,
+        "payments": [
+          {
+            "amount": 1.0,
+            "createdAt": "2026-09-17T02:47:57.340011Z",
+            "currency": "USD",
+            "orderId": "382b836d-5cde-4046-8a2d-39df975c9ff0",
+            "paymentId": "fd94efe2-9509-4329-882c-d394f889f005",
+            "taskId": "382b836d-5cde-4046-8a2d-39df975c9ff0",
+            "workflowId": "9b736abd-81c6-4888-8014-1618fe0a2ab4"
+          }
+        ],
+        "tasks": [
+          {
+            "attemptCount": 2,
+            "backoffMultiplier": 2.0,
+            "createdAt": "2026-09-17T02:47:45.058409Z",
+            "dependencies": [],
+            "executionId": "3b7da7e4-1a2a-46d5-99b4-a293fce532e3",
+            "finishedAt": "2026-09-17T02:47:57.274994Z",
+            "id": "23c1749a-b03b-42bf-9620-b93eb9968455",
+            "initialRetryDelayMs": 100,
+            "maxRetries": 3,
+            "name": "wait",
+            "nextRunAt": "2026-09-17T02:47:48.767987Z",
+            "payload": {
+              "durationMs": 8000
+            },
+            "result": {
+              "sleptMs": 8000
+            },
+            "startedAt": "2026-09-17T02:47:45.239773Z",
+            "status": "COMPLETED",
+            "taskType": "DELAY",
+            "timeoutMs": 12000,
+            "workerId": "141b2b25-6aef-46e5-9a8e-decd3f3362fa",
+            "workflowId": "9b736abd-81c6-4888-8014-1618fe0a2ab4"
+          },
+          {
+            "attemptCount": 1,
+            "backoffMultiplier": 2.0,
+            "createdAt": "2026-09-17T02:47:45.058833Z",
+            "dependencies": [
+              "23c1749a-b03b-42bf-9620-b93eb9968455"
+            ],
+            "executionId": "7da42ef5-11b8-4e86-865f-e6b27ca06047",
+            "finishedAt": "2026-09-17T02:47:57.377562Z",
+            "id": "382b836d-5cde-4046-8a2d-39df975c9ff0",
+            "initialRetryDelayMs": 100,
+            "maxRetries": 3,
+            "name": "charge",
+            "nextRunAt": "2026-09-17T02:47:45.058833Z",
+            "payload": {
+              "amount": 1,
+              "currency": "USD"
+            },
+            "result": {
+              "amount": 1.0,
+              "currency": "USD",
+              "orderId": "382b836d-5cde-4046-8a2d-39df975c9ff0",
+              "paymentId": "fd94efe2-9509-4329-882c-d394f889f005"
+            },
+            "startedAt": "2026-09-17T02:47:57.334550Z",
+            "status": "COMPLETED",
+            "taskType": "MOCK_PAYMENT",
+            "timeoutMs": 30000,
+            "workerId": "2de413fb-f121-4ada-a870-48738132d841",
+            "workflowId": "9b736abd-81c6-4888-8014-1618fe0a2ab4"
+          }
+        ],
+        "workflow": {
+          "completedTasks": 2,
+          "concurrencyLimit": 8,
+          "createdAt": "2026-09-17T02:47:45.058013Z",
+          "finishedAt": "2026-09-17T02:47:57.378722Z",
+          "id": "9b736abd-81c6-4888-8014-1618fe0a2ab4",
+          "name": "audit-postgres-42c76089",
+          "startedAt": "2026-09-17T02:47:45.221819Z",
+          "status": "COMPLETED",
+          "totalTasks": 2
+        }
+      },
+      "verified": true
+    }
+  },
+  "configuration": {
+    "allow_service_restart": true,
+    "base_url": "http://localhost:8088",
+    "output": "load-tests/results/outages.json",
+    "project_name": "flowforge",
+    "scenario": "all",
+    "timeout": 180
+  },
+  "errors": [],
+  "finishedAt": "2026-09-17T02:48:52.662880+00:00",
+  "schemaVersion": 1,
+  "startedAt": "2026-09-17T02:47:37.372629+00:00",
+  "verified": true
+}

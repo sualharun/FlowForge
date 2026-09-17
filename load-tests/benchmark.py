@@ -8,13 +8,16 @@ from __future__ import annotations
 import argparse
 from collections import Counter, defaultdict
 from concurrent.futures import ThreadPoolExecutor, as_completed
+import hashlib
 import json
+from pathlib import Path
 import platform
 import subprocess
 import sys
 import time
 import uuid
 
+from benchmark_timing import ExecutionClock
 from flowforge_client import (Client, TERMINAL, assert_dependencies, percentile,
                              task, timestamp, utc_now, write_result)
 
@@ -88,7 +91,7 @@ def parse_args():
     parser.add_argument("--width", type=int, default=10)
     parser.add_argument("--layers", type=int, default=20)
     parser.add_argument("--delay-ms", type=int, default=20)
-    parser.add_argument("--timeout", type=float, default=1800, help="Whole-run wall time deadline in seconds")
+    parser.add_argument("--timeout", type=float, default=1800, help="Submission/polling deadline in seconds; accounts for observed wall-clock pauses")
     parser.add_argument("--poll-interval", type=float, default=1)
     parser.add_argument("--output", default="load-tests/results/latest.json")
     parser.add_argument("--skip-payment-verification", action="store_true", help="Report duplicate count as null")
@@ -106,45 +109,80 @@ def parse_args():
 def main():
     args = parse_args()
     client = Client(args.base_url)
-    result = {"schemaVersion": 1, "startedAt": utc_now(), "configuration": vars(args),
+    result = {"schemaVersion": 2, "startedAt": utc_now(), "configuration": vars(args),
               "environment": {"platform": platform.platform(), "python": platform.python_version()},
-              "errors": [], "workflowIds": [], "timedOutWorkflowIds": [], "verified": False}
+              "errors": [], "workflowIds": [], "timedOutWorkflowIds": [], "verified": False,
+              "correctnessVerified": False, "timingVerified": False}
+    repository = Path(__file__).resolve().parent.parent
     try:
         result["environment"]["gitCommit"] = subprocess.run(
-            ["git", "rev-parse", "HEAD"], capture_output=True, text=True, check=True).stdout.strip()
+            ["git", "rev-parse", "HEAD"], cwd=repository, capture_output=True, text=True, check=True).stdout.strip()
+        status = subprocess.run(["git", "status", "--porcelain=v1", "--untracked-files=all"],
+                                cwd=repository, capture_output=True, text=True, check=True).stdout
+        result["environment"]["gitDirty"] = bool(status.strip())
+        result["environment"]["gitStatusPorcelain"] = status.splitlines()
     except (OSError, subprocess.CalledProcessError):
-        result["environment"]["gitCommit"] = None
-    start = time.monotonic()
+        result["environment"].setdefault("gitCommit", None)
+        result["environment"].setdefault("gitDirty", None)
+    result["environment"]["harnessSourceSha256"] = {
+        name: hashlib.sha256((repository / "load-tests" / name).read_bytes()).hexdigest()
+        for name in ("benchmark.py", "benchmark_timing.py", "flowforge_client.py")
+    }
+    result["environment"]["monotonicClock"] = vars(time.get_clock_info("monotonic"))
+    clock = None
     run_id = uuid.uuid4().hex[:10]
     submissions, finished, details = {}, {}, []
     try:
         result["metricsBefore"] = client.request("/api/metrics/summary")
         result["workersBefore"] = client.request("/api/workers")
+        # These samples bracket execution exactly. Read-only setup and verification
+        # cannot inflate the denominator used for throughput.
+        clock = ExecutionClock()
+
+        def submit_before_deadline(value):
+            if clock.observe() >= args.timeout:
+                raise TimeoutError("Execution deadline reached before this submission started")
+            return client.submit(value)
+
         with ThreadPoolExecutor(max_workers=args.submit_concurrency) as pool:
-            futures = {pool.submit(client.submit, definition(args.scenario, n, run_id, args.width, args.layers, args.delay_ms)): n
+            futures = {pool.submit(submit_before_deadline, definition(args.scenario, n, run_id, args.width, args.layers, args.delay_ms)): n
                        for n in range(args.workflows)}
             for future in as_completed(futures):
+                clock.observe()
                 try:
                     value = future.result()
                     submissions[value["id"]] = value
                 except Exception as error:
                     result["errors"].append({"phase": "submit", "index": futures[future], "error": str(error)})
-        result["submissionDurationSeconds"] = time.monotonic() - start
+        clock.observe()
+        result["submissionDurationSeconds"] = clock.monotonic_duration_seconds
         result["workflowIds"] = list(submissions)
         pending = set(submissions)
+
+        def poll_before_deadline(workflow_id):
+            if clock.observe() >= args.timeout:
+                return None
+            return client.request(f"/api/workflows/{workflow_id}")
+
         with ThreadPoolExecutor(max_workers=args.poll_concurrency) as pool:
-            while pending and time.monotonic() - start < args.timeout:
-                futures = {pool.submit(client.request, f"/api/workflows/{workflow_id}"): workflow_id for workflow_id in pending}
+            while pending and clock.observe() < args.timeout:
+                futures = {pool.submit(poll_before_deadline, workflow_id): workflow_id for workflow_id in pending}
                 for future in as_completed(futures):
+                    clock.observe()
                     workflow = future.result()
+                    if workflow is None:
+                        continue
                     if workflow["status"] in TERMINAL:
                         finished[workflow["id"]] = workflow
                         pending.remove(workflow["id"])
-                print(f"{args.scenario}: {len(finished)}/{len(submissions)} terminal, elapsed {time.monotonic() - start:.1f}s", flush=True)
+                        if not pending:
+                            clock.stop()
+                elapsed = clock.observe()
+                print(f"{args.scenario}: {len(finished)}/{len(submissions)} terminal, elapsed {elapsed:.1f}s", flush=True)
                 if pending:
-                    time.sleep(args.poll_interval)
+                    time.sleep(min(args.poll_interval, max(0, args.timeout - elapsed)))
             # Stop throughput timing before the read-only verification requests.
-            result["executionDurationSeconds"] = time.monotonic() - start
+            clock.stop()
             result["timedOutWorkflowIds"] = sorted(pending)
             futures = {pool.submit(verify_workflow, client, workflow_id, not args.skip_payment_verification): workflow_id
                        for workflow_id in finished}
@@ -157,7 +195,10 @@ def main():
         result["workersAfter"] = client.request("/api/workers")
     except Exception as error:
         result["errors"].append({"phase": "run", "error": str(error)})
-    duration = result.get("executionDurationSeconds", time.monotonic() - start)
+    if clock is not None:
+        clock.stop()
+    duration = clock.monotonic_duration_seconds if clock is not None else None
+    result["executionDurationSeconds"] = duration
     statuses = Counter(item["status"] for item in finished.values())
     all_tasks = [item for workflow in details for item in workflow["tasks"]]
     attempts = [item for workflow in details for item in workflow["attempts"]]
@@ -166,14 +207,22 @@ def main():
                  for item in finished.values() if item.get("finishedAt")]
     task_durations = [(timestamp(item["finishedAt"]) - timestamp(item["startedAt"])) * 1000
                       for item in attempts if item["status"] == "COMPLETED" and item.get("startedAt") and item.get("finishedAt")]
+    result["correctnessVerified"] = (not result["errors"] and len(submissions) == args.workflows
+                                     and statuses["COMPLETED"] == args.workflows and len(details) == args.workflows)
+    result["timing"] = clock.report(list({**submissions, **finished}.values()), all_tasks, attempts) if clock else {
+        "consistent": False, "issues": ["Execution never started; setup failed"]}
+    result["timingVerified"] = result["timing"]["consistent"]
+    for issue in result["timing"]["issues"]:
+        result["errors"].append({"phase": "timing", "error": issue})
+    result["verified"] = result["correctnessVerified"] and result["timingVerified"]
     result["summary"] = {
         "workflowsRequested": args.workflows, "workflowsSubmitted": len(submissions),
         "workflowsCompleted": statuses["COMPLETED"], "workflowsFailed": statuses["FAILED"],
         "workflowsCancelled": statuses["CANCELLED"], "workflowsUnfinished": len(submissions) - len(finished),
         "totalTasks": sum(int(item.get("totalTasks", 0)) for item in submissions.values()),
         "verifiedTasks": len(all_tasks), "completedTasks": sum(item["status"] == "COMPLETED" for item in all_tasks),
-        "workflowsPerSecond": statuses["COMPLETED"] / duration if duration else None,
-        "tasksPerSecond": sum(item["status"] == "COMPLETED" for item in all_tasks) / duration if duration else None,
+        "workflowsPerSecond": statuses["COMPLETED"] / duration if result["verified"] else None,
+        "tasksPerSecond": sum(item["status"] == "COMPLETED" for item in all_tasks) / duration if result["verified"] else None,
         "p50WorkflowLatencyMs": percentile(latencies, 0.5), "p95WorkflowLatencyMs": percentile(latencies, 0.95),
         "p50TaskDurationMs": percentile(task_durations, 0.5), "p95TaskDurationMs": percentile(task_durations, 0.95),
         "failureRate": statuses["FAILED"] / len(submissions) if submissions else None,
@@ -187,12 +236,11 @@ def main():
         "workerRecoveryTimeMs": None,
     }
     result["workflowDetails"] = details
-    result["verified"] = (not result["errors"] and len(submissions) == args.workflows
-                          and statuses["COMPLETED"] == args.workflows and len(details) == args.workflows)
     result["finishedAt"] = utc_now()
     write_result(args.output, result)
     print(json.dumps(result["summary"], indent=2))
-    print(f"Measured result: {args.output}; verified={result['verified']}")
+    print(f"Measured result: {args.output}; correctnessVerified={result['correctnessVerified']}; "
+          f"timingVerified={result['timingVerified']}; verified={result['verified']}")
     return 0 if result["verified"] else 1
 
 

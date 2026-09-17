@@ -16,6 +16,22 @@ jobs:
         with:
           name: junit-results
           path: '**/target/surefire-reports/'
+  harness:
+    # The clock-validation logic decides whether a benchmark may report throughput
+    # at all, so it is tested here. These cases need no running stack.
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: load-tests
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - run: python -m unittest discover --pattern 'test_*.py' --verbose
+      - name: Check the harness scripts parse
+        run: python -m compileall -q benchmark.py benchmark_timing.py chaos.py resilience.py outages.py flowforge_client.py
+
   frontend:
     runs-on: ubuntu-latest
     defaults:

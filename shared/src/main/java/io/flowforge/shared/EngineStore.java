@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.nio.charset.StandardCharsets;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
@@ -60,7 +61,7 @@ public class EngineStore {
         for (var task : definition.tasks()) {
             UUID id = UUID.randomUUID(); ids.put(task.name(),id);
             String payload = encode(task.payload() == null ? Map.of() : task.payload());
-            if (payload.length() > 65536) throw new IllegalArgumentException("Task payload exceeds 64 KiB");
+            if (payload.getBytes(StandardCharsets.UTF_8).length > 65536) throw new IllegalArgumentException("Task payload exceeds 64 KiB");
             db.update("""
                 INSERT INTO workflow_tasks(id,workflow_id,name,task_type,payload,status,timeout_ms,max_retries,initial_retry_delay_ms,backoff_multiplier)
                 VALUES (?,?,?,?,?::jsonb,'PENDING',?,?,?,?)
